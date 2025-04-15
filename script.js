@@ -190,7 +190,7 @@ renderTasks();
     selectedTaskId = null;
     renderTabs();
     renderTasks();
-  }
+  
 };
 
 

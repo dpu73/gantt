@@ -44,29 +44,55 @@
 <button id="quickAddTask">➕ Add First Task</button>
 
 
-  <p class="small-note">Project name affects export filename.</p>
 </div>
 
 <div class="tab-panel hidden" id="panelTask">
   <h2>Primary Task Editor</h2>
-  <div id="taskFields"></div>
-  <div id="taskColorPicker"></div>
+
+<button id="addPrimaryStart" title="Start Aligned">
+  <span>🡠</span><br>Add (Start)
+</button>
+<button id="addPrimaryEnd" title="End Aligned">
+  <span>🡢</span><br>Add (End)
+</button>
+<button id="deleteTaskFromEditor" title="Delete">
+  <span>🗑</span><br>Delete
+</button>
+<button id="applyTaskChanges" title="Apply">
+  <span>💾</span><br>Apply
+</button>
 
   <hr />
-  <button id="addPrimaryStart">🆕 Add Task (Start Aligned)</button>
-  <button id="addPrimaryEnd">🆕 Add Task (End Aligned)</button>
-  <button id="deleteTaskFromEditor">🗑 Delete Task</button>
-  <button id="applyTaskChanges">✅ Apply Changes</button>
+
+    <div id="taskColorPicker"></div>
+
+  <hr />
+  
+  <div id="taskFields"></div>
+
+
+  <hr />
+
+
 </div>
 
 <div class="tab-panel hidden" id="panelSubtask">
   <h2>Subtask Editor</h2>
+
+ <button id="addSub" title="Add Subtask">
+  <span>🡠</span><br>➕ Add Subtask
+</button>
+  <button id="deleteSubtask" title="Delete Subtask">
+  <span>🗑</span><br>🗑 Delete Subtask
+</button>
+  <button id="deleteSubtask">🗑 Delete Subtask</button>
+<button id="applyTaskChanges" title="Apply">
+  <span>💾</span><br>Apply
+</button> 
   <div id="subtaskFields"></div>
 
-  <hr />
-  <button id="addSub">➕ Add Subtask</button>
-  <button id="deleteSubtask">🗑 Delete Subtask</button>
-  <button id="applySubtaskChanges">✅ Apply Changes</button>
+
+  
 </div>
 
 

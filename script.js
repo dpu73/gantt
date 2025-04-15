@@ -235,6 +235,7 @@ function canAccessTab(tab) {
   }
 }
 
+
 function renderTasks() {
   const timeline = document.getElementById("timeline");
   timeline.innerHTML = "";

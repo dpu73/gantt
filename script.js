@@ -176,11 +176,6 @@ renderTasks();
 
 
 
-// Slide remaining tasks forward
-
-
-tasks = tasks.filter(t => t.id !== deletedId);
-
 // Find the task that should now be treated as the previous one
 
   i > 0 && tasks[i - 1].id === deletedId
@@ -198,19 +193,6 @@ for (let i = newIndex; i < tasks.length; i++) {
 selectedTaskId = null;
 renderTabs();
 renderTasks();
-
-  }
-  ;
-
-
-
-    selectedTaskId = null;
-    renderTabs();
-    renderTasks();
-  
-;
-
-
 
   // Subtask tab buttons
   document.getElementById("addSub").onclick = () => {
@@ -261,6 +243,7 @@ renderTasks();
     renderTasks();
   };
 
+}
 
 function setupSettings() {
   const toggle = document.getElementById("autoColorToggle");

@@ -596,7 +596,7 @@ function showToast(msg) {
     renderTasks();
   }
 };
-} // <-- END of setupButtons()
+// <-- END of setupButtons()
 
 // === HELPERS ===
 function createTask(start = new Date().toISOString().split("T")[0]) {

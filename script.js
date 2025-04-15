@@ -151,6 +151,82 @@ function setupButtons() {
     const editor = document.getElementById("editor");
     editor.style.display = editor.style.display === "none" ? "block" : "none";
   };
+
+document.getElementById("addPrimaryStart").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selectedTask = selectedTaskId ? findTaskById(selectedTaskId) : null;
+
+  const base = alignMode === "selected" && selectedTask
+    ? selectedTask.start
+    : last?.start || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
+
+  document.getElementById("addPrimaryEnd").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
+
+  const base = alignMode === "selected" && selected
+    ? selected.end
+    : last?.end || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  if (alignMode === "recent") {
+    selectedTaskId = task.id;
+    editorTab = "task";
+    renderTabs();
+  }
+
+  renderTasks();
+};
+
+document.getElementById("deleteTaskFromEditor").onclick = () => {
+  if (!selectedTaskId) return;
+  if (!confirm("Delete this task?")) return;
+
+  const deletedId = selectedTaskId;
+  const deletedIndex = tasks.findIndex(t => t.id === deletedId);
+  tasks = tasks.filter(t => t.id !== deletedId);
+
+  const newIndex = tasks.findIndex((t, i) =>
+    i > 0 && tasks[i - 1].id === deletedId
+  );
+  const fixedIndex = newIndex === -1 ? 0 : newIndex;
+
+  if (fixedIndex < tasks.length) {
+    let prevEnd;
+    if (fixedIndex > 0 && tasks[fixedIndex - 1]) {
+      prevEnd = tasks[fixedIndex - 1].end;
+    } else {
+      prevEnd = new Date().toISOString().split("T")[0];
+    }
+
+    for (let i = fixedIndex; i < tasks.length; i++) {
+      const duration = getTaskDuration(tasks[i]);
+      tasks[i].start = prevEnd;
+      tasks[i].end = addDays(tasks[i].start, duration);
+      prevEnd = tasks[i].end;
+    }
+  }
+
+  selectedTaskId = null;
+  renderTabs();
+  renderTasks();
+};
+
+  
+  
 }
 
 // === RENDERING ===

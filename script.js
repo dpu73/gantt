@@ -97,6 +97,10 @@ document.getElementById("newProject").onclick = () => {
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
     renderTasks();
+    selectedTaskId = task.id;
+editorTab = "task";
+renderTabs();
+
   };
 
   document.getElementById("addPrimaryEnd").onclick = () => {
@@ -108,6 +112,10 @@ document.getElementById("newProject").onclick = () => {
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
     renderTasks();
+    selectedTaskId = task.id;
+editorTab = "task";
+renderTabs();
+
   };
 
 document.getElementById("deleteTaskFromEditor").onclick = () => {

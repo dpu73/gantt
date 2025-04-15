@@ -11,27 +11,14 @@
 
 <header>
   <div class="header-left">
-    <h1>GANTT2 <span class="version-tag">v0.2.5</span></h1>
+    <h1>GANTT2 <span class="version-tag">v0.2.6</span></h1>
     <div id="projectTitle">Untitled Project</div>
   </div>
-
   <div class="header-right">
-    <div class="button-group">
-      <button id="newProject">🧹 New Project</button>
-      <button id="importBtn">📥 Import</button>
-      <button id="exportBtn">📤 Export</button>
-    </div>
-    <div class="button-group">
-      <button id="addPrimaryStart">🆕 Task (Start Aligned)</button>
-      <button id="addPrimaryEnd">🆕 Task (End Aligned)</button>
-      <button id="addSub">➕ Sub Task</button>
-      <button id="deleteTask">🗑️ Delete Task</button>
-    </div>
-    <div class="button-group">
-      <button id="toggleEditor">🪟 Toggle Editor</button>
-    </div>
+    <button id="toggleEditor" title="Toggle Editor">🪟</button>
   </div>
 </header>
+
 
 <main>
   <section id="timeline"></section>
@@ -44,27 +31,43 @@
       <button class="tab-btn disabled" id="tabTimeline">⚙️ Timeline</button>
     </div>
 
-    <div class="tab-panel" id="panelProject">
-      <h2>Project Editor</h2>
-      <label>Project Name: <input type="text" id="projectNameField" /></label>
-      <button id="applyProjectName">✔ Apply Project Name</button>
-      <p class="small-note">This name is used in the filename for exports.</p>
-    </div>
+<div class="tab-panel" id="panelProject">
+  <h2>Project Editor</h2>
+  <label>Project Name: <input type="text" id="projectNameField" /></label>
+  <button id="applyProjectName">✔ Apply Project Name</button>
 
-    <div class="tab-panel hidden" id="panelTask">
-      <h2>Primary Task Editor</h2>
-      <div id="taskFields"></div>
-      <div id="taskColorPicker"></div>
-      <button id="applyTaskChanges">✅ Apply Changes</button>
-      <button id="deleteTaskFromEditor">🗑 Delete Task</button>
-    </div>
+  <hr />
+  <button id="newProject">🧹 New Project</button>
+  <button id="importBtn">📥 Import</button>
+  <button id="exportBtn">📤 Export</button>
 
-    <div class="tab-panel hidden" id="panelSubtask">
-      <h2>Subtask Editor</h2>
-      <div id="subtaskFields"></div>
-      <button id="applySubtaskChanges">✅ Apply Changes</button>
-      <button id="deleteSubtask">🗑 Delete Subtask</button>
-    </div>
+  <p class="small-note">Project name affects export filename.</p>
+</div>
+
+<div class="tab-panel hidden" id="panelTask">
+  <h2>Primary Task Editor</h2>
+  <div id="taskFields"></div>
+  <div id="taskColorPicker"></div>
+
+  <hr />
+  <button id="addPrimaryStart">🆕 Add Task (Start Aligned)</button>
+  <button id="addPrimaryEnd">🆕 Add Task (End Aligned)</button>
+  <button id="deleteTaskFromEditor">🗑 Delete Task</button>
+  <button id="applyTaskChanges">✅ Apply Changes</button>
+</div>
+
+<div class="tab-panel hidden" id="panelSubtask">
+  <h2>Subtask Editor</h2>
+  <div id="subtaskFields"></div>
+
+  <hr />
+  <button id="addSub">➕ Add Subtask</button>
+  <button id="deleteSubtask">🗑 Delete Subtask</button>
+  <button id="applySubtaskChanges">✅ Apply Changes</button>
+</div>
+
+
+
 
     <div class="tab-panel hidden" id="panelTimeline">
       <h2>Timeline Settings</h2>

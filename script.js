@@ -62,7 +62,7 @@ function canAccessTab(tab) {
   switch (tab) {
     case "project": return true;
     case "task": return !!selectedTaskId || tasks.length === 0;
-    case "subtask": return !!selectedSubtask;
+    case "subtask": return !!selectedSubtaskId;
     case "timeline": return !!projectName;
     default: return false;
   }

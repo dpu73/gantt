@@ -87,10 +87,14 @@ main {
 }
 
 .task.selected {
-  outline: 3px solid #007bff;
-  background-color: #e6f0ff !important;
+  outline: 3px solid #2e59d9;
+  background-color: #e4f1ff !important;
+  box-shadow: 0 0 10px rgba(46, 89, 217, 0.4);
   z-index: 2;
+  transform: scale(1.02);
+  transition: transform 0.1s ease-in-out;
 }
+
 
 .subtask {
   font-size: 0.85em;
@@ -146,6 +150,28 @@ main {
 
 .tab-panel {
   padding: 1rem;
+}
+.tab-panel button {
+  border: none;
+  background: none;
+  color: #333;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin: 0.3rem;
+  padding: 0.4rem;
+}
+
+.tab-panel button:hover {
+  color: #007bff;
+  transform: scale(1.1);
+}
+
+.tab-panel button::before {
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
 }
 
 .tab-panel.hidden {

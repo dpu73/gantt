@@ -287,6 +287,18 @@ function renderTasks() {
   timeline.appendChild(wrapper);
 }
 
+function editSubtask(taskId, subId) {
+  const task = findTaskById(taskId);
+  if (!task) return;
+
+  const sub = task.subtasks.find(s => s.id === subId);
+  if (!sub) return;
+
+  selectedTaskId = taskId;
+  selectedSubtask = sub;
+  editorTab = "subtask";
+  renderTabs();
+}
 
 function renderTaskEditor() {
   const task = findTaskById(selectedTaskId);

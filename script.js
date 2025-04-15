@@ -117,16 +117,6 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
     const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);
     tasks = tasks.filter(t => t.id !== selectedTaskId);
 
-    // Slide remaining tasks forward
-
-console.log("Deleting:", selectedTaskId);
-console.log("Deleted Index:", deletedIndex);
-console.log("Remaining:", tasks.map(t => t.name));
-
-    
-document.getElementById("deleteTaskFromEditor").onclick = () => {
-  if (!selectedTaskId) return;
-
   if (confirm("Delete this task?")) {
     // Slide remaining tasks forward
     const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);
@@ -376,11 +366,32 @@ function renderTaskEditor() {
     renderTasks();
     showToast("✅ Task updated");
   };
-  document.getElementById("deleteTaskFromEditor").onclick = () => {
-    tasks = tasks.filter(t => t.id !== task.id);
+ document.getElementById("deleteTaskFromEditor").onclick = () => {
+  if (!selectedTaskId) return;
+
+  if (confirm("Delete this task?")) {
+    const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);
+    const prevTask = tasks[deletedIndex - 1] || null;
+    const deletedTaskId = selectedTaskId;
+
+    tasks = tasks.filter(t => t.id !== deletedTaskId);
+
+    let prevEnd = prevTask ? prevTask.end : new Date().toISOString().split("T")[0];
+
+    for (let i = 0; i < tasks.length; i++) {
+      if (i >= deletedIndex) {
+        tasks[i].start = prevEnd;
+        tasks[i].end = addDays(tasks[i].start, getTaskDuration(tasks[i]));
+      }
+      prevEnd = tasks[i].end;
+    }
+
     selectedTaskId = null;
     renderTabs();
     renderTasks();
+  }
+};
+
   };
 }
 

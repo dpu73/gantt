@@ -183,7 +183,7 @@ renderTabs();
 renderTasks();
 
   }
-  };
+  ;
 
 
 

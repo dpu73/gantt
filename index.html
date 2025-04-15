@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html>
-  <head><title>Gantt Web</title>  <script type="module" crossorigin src="/gantt/assets/index-B_vTD4-E.js"></script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GANTT2</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="favicon.png" />
 </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>GANTT2 <span class="version-tag">v0.2.5</span></h1>
+    <div id="projectTitle">Untitled Project</div>
+  </div>
+
+  <div class="header-right">
+    <div class="button-group">
+      <button id="newProject">🧹 New Project</button>
+      <button id="importBtn">📥 Import</button>
+      <button id="exportBtn">📤 Export</button>
+    </div>
+    <div class="button-group">
+      <button id="addPrimaryStart">🆕 Task (Start Aligned)</button>
+      <button id="addPrimaryEnd">🆕 Task (End Aligned)</button>
+      <button id="addSub">➕ Sub Task</button>
+      <button id="deleteTask">🗑️ Delete Task</button>
+    </div>
+    <div class="button-group">
+      <button id="toggleEditor">🪟 Toggle Editor</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="timeline"></section>
+
+  <aside id="editor">
+    <div class="editor-tabs">
+      <button class="tab-btn active" id="tabProject">📁 Project</button>
+      <button class="tab-btn disabled" id="tabTask">🧱 Task</button>
+      <button class="tab-btn disabled" id="tabSubtask">🧷 Subtask</button>
+      <button class="tab-btn disabled" id="tabTimeline">⚙️ Timeline</button>
+    </div>
+
+    <div class="tab-panel" id="panelProject">
+      <h2>Project Editor</h2>
+      <label>Project Name: <input type="text" id="projectNameField" /></label>
+      <button id="applyProjectName">✔ Apply Project Name</button>
+      <p class="small-note">This name is used in the filename for exports.</p>
+    </div>
+
+    <div class="tab-panel hidden" id="panelTask">
+      <h2>Primary Task Editor</h2>
+      <div id="taskFields"></div>
+      <div id="taskColorPicker"></div>
+      <button id="applyTaskChanges">✅ Apply Changes</button>
+      <button id="deleteTaskFromEditor">🗑 Delete Task</button>
+    </div>
+
+    <div class="tab-panel hidden" id="panelSubtask">
+      <h2>Subtask Editor</h2>
+      <div id="subtaskFields"></div>
+      <button id="applySubtaskChanges">✅ Apply Changes</button>
+      <button id="deleteSubtask">🗑 Delete Subtask</button>
+    </div>
+
+    <div class="tab-panel hidden" id="panelTimeline">
+      <h2>Timeline Settings</h2>
+      <label>Default Task Duration:
+        <input type="number" id="defaultDuration" value="1" min="1" style="max-width: 4ch;" />
+      </label>
+      <label>Auto-Assign Colors:
+        <input type="checkbox" id="autoColorToggle" checked />
+      </label>
+      <label>Show Timeline Grid:
+        <input type="checkbox" id="gridToggle" checked />
+      </label>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <button id="zoomIn">🔍 ZOOM +</button>
+  <button id="zoomOut">🔎 ZOOM -</button>
+  <button id="fitWidth">🧩 Fit Width</button>
+  <button id="collapseAll">📉 Collapse</button>
+  <button id="expandAll">📈 Expand</button>
+</footer>
+
+<input type="file" id="fileInput" accept=".json" style="display:none" />
+<script src="script.js"></script>
+</body>
 </html>

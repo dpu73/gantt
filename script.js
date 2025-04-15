@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupButtons() {
+  // Project tab buttons
   document.getElementById("applyProjectName").onclick = () => {
     projectName = document.getElementById("projectNameField").value;
     document.getElementById("projectTitle").textContent = projectName;
@@ -39,6 +40,7 @@ function setupButtons() {
   };
 
   document.getElementById("importBtn").onclick = () => document.getElementById("fileInput").click();
+
   document.getElementById("fileInput").onchange = e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -48,8 +50,8 @@ function setupButtons() {
       tasks = data.tasks || [];
       projectName = data.meta?.projectName || "Untitled Project";
       document.getElementById("projectTitle").textContent = projectName;
-      renderTasks();
       renderTabs();
+      renderTasks();
     };
     reader.readAsText(file);
   };
@@ -64,14 +66,18 @@ function setupButtons() {
     link.click();
   };
 
+  // Toggle editor button in header
   document.getElementById("toggleEditor").onclick = () => {
     const editor = document.getElementById("editor");
     editor.style.display = editor.style.display === "none" ? "block" : "none";
   };
 
+  // Task tab buttons
   document.getElementById("addPrimaryStart").onclick = () => {
     const last = tasks[tasks.length - 1];
-    const base = last?.start || new Date().toISOString().split("T")[0];
+    const base = selectedTaskId
+      ? findTaskById(selectedTaskId).start
+      : (last?.start || new Date().toISOString().split("T")[0]);
     const task = createTask(base);
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
@@ -80,13 +86,26 @@ function setupButtons() {
 
   document.getElementById("addPrimaryEnd").onclick = () => {
     const last = tasks[tasks.length - 1];
-    const base = last?.end || new Date().toISOString().split("T")[0];
+    const base = selectedTaskId
+      ? findTaskById(selectedTaskId).end
+      : (last?.end || new Date().toISOString().split("T")[0]);
     const task = createTask(base);
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
     renderTasks();
   };
 
+  document.getElementById("deleteTaskFromEditor").onclick = () => {
+    if (!selectedTaskId) return;
+    if (confirm("Delete this task?")) {
+      tasks = tasks.filter(t => t.id !== selectedTaskId);
+      selectedTaskId = null;
+      renderTabs();
+      renderTasks();
+    }
+  };
+
+  // Subtask tab buttons
   document.getElementById("addSub").onclick = () => {
     if (!selectedTaskId) return alert("Select a task first.");
     const parent = findTaskById(selectedTaskId);
@@ -105,17 +124,16 @@ function setupButtons() {
     renderTasks();
   };
 
-  document.getElementById("deleteTask").onclick = () => {
-    if (!selectedTaskId) return;
-    if (confirm("Delete this task and its subtasks?")) {
-      tasks = tasks.filter(t => t.id !== selectedTaskId);
-      selectedTaskId = null;
-      selectedSubtask = null;
-      renderTabs();
-      renderTasks();
-    }
+  document.getElementById("deleteSubtask").onclick = () => {
+    const parent = findTaskById(selectedTaskId);
+    if (!parent || !selectedSubtask) return;
+    parent.subtasks = parent.subtasks.filter(s => s.id !== selectedSubtask.id);
+    selectedSubtask = null;
+    renderTabs();
+    renderTasks();
   };
 
+  // Zoom + collapse
   document.getElementById("zoomIn").onclick = () => {
     zoomLevel = Math.min(zoomLevel * 1.25, 800);
     renderTasks();
@@ -136,6 +154,7 @@ function setupButtons() {
     renderTasks();
   };
 }
+
 function setupSettings() {
   const toggle = document.getElementById("autoColorToggle");
   if (toggle) {

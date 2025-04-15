@@ -9,7 +9,6 @@ let colorIndex = 0;
 let zoomLevel = 300; // px per day
 let alignMode = "recent"; // or "selected"
 
-
 const taskColors = ["#F8961E", "#577590", "#43AA8B", "#9A5AFF", "#F94144", "#F3722C", "#43A047", "#6A1B9A"];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,6 +28,39 @@ function setupButtons() {
     document.getElementById("projectTitle").textContent = projectName;
   };
 
+  document.getElementById("deleteTaskFromEditor").onclick = () => {
+  if (!selectedTaskId) return;
+
+  if (confirm("Delete this task?")) {
+    const deletedId = selectedTaskId;
+
+    // 🔍 Store index before filtering
+    const deletedIndex = tasks.findIndex(t => t.id === deletedId);
+    tasks = tasks.filter(t => t.id !== deletedId);
+
+    // 🔎 Find where to start reflow
+const newIndex = tasks.findIndex((t, i) =>
+  i > 0 && tasks[i - 1].id === deletedId
+);
+const fixedIndex = newIndex === -1 ? 0 : newIndex;
+
+if (fixedIndex < tasks.length) {
+  let prevEnd;
+
+  if (fixedIndex > 0 && tasks[fixedIndex - 1]) {
+    prevEnd = tasks[fixedIndex - 1].end;
+  } else {
+    prevEnd = new Date().toISOString().split("T")[0];
+  }
+
+  for (let i = fixedIndex; i < tasks.length; i++) {
+    const duration = getTaskDuration(tasks[i]);
+    tasks[i].start = prevEnd;
+    tasks[i].end = addDays(tasks[i].start, duration);
+    prevEnd = tasks[i].end;
+  }
+}
+
 document.getElementById("newProject").onclick = () => {
   if (!confirm("Start a new project? Unsaved data will be lost.")) return;
 
@@ -46,7 +78,6 @@ document.getElementById("newProject").onclick = () => {
   tasks.push(task);
   console.log("Added task at:", task.start, "→", task.end);
 
-
   selectedTaskId = task.id;
     editorTab = "task";
   renderTabs();
@@ -57,7 +88,6 @@ document.getElementById("newProject").onclick = () => {
   renderTabs();
   renderTasks();
 };
-
 
   document.getElementById("importBtn").onclick = () => document.getElementById("fileInput").click();
 
@@ -111,7 +141,6 @@ document.getElementById("addPrimaryStart").onclick = () => {
   renderTasks();
 };
 
-
 document.getElementById("addPrimaryEnd").onclick = () => {
   const last = tasks[tasks.length - 1];
   const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
@@ -133,48 +162,6 @@ document.getElementById("addPrimaryEnd").onclick = () => {
 
   renderTasks();
 };
-
-
-
-document.getElementById("deleteTaskFromEditor").onclick = () => {
-  if (!selectedTaskId) return;
-
-  if (confirm("Delete this task?")) {
-    const deletedId = selectedTaskId;
-
-    // 🔍 Store index before filtering
-    const deletedIndex = tasks.findIndex(t => t.id === deletedId);
-    tasks = tasks.filter(t => t.id !== deletedId);
-
-
-    // 🔎 Find where to start reflow
-const newIndex = tasks.findIndex((t, i) =>
-  i > 0 && tasks[i - 1].id === deletedId
-);
-const fixedIndex = newIndex === -1 ? 0 : newIndex;
-
-if (fixedIndex < tasks.length) {
-  let prevEnd;
-
-  if (fixedIndex > 0 && tasks[fixedIndex - 1]) {
-    prevEnd = tasks[fixedIndex - 1].end;
-  } else {
-    prevEnd = new Date().toISOString().split("T")[0];
-  }
-
-  for (let i = fixedIndex; i < tasks.length; i++) {
-    const duration = getTaskDuration(tasks[i]);
-    tasks[i].start = prevEnd;
-    tasks[i].end = addDays(tasks[i].start, duration);
-    prevEnd = tasks[i].end;
-  }
-}
-
-selectedTaskId = null;
-renderTabs();
-renderTasks();
-
-
 
 // Find the task that should now be treated as the previous one
 
@@ -422,32 +409,7 @@ function renderTaskEditor() {
     showToast("✅ Task updated");
   };
 
-
-  if (confirm("Delete this task?")) {
-    const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);
-    const prevTask = tasks[deletedIndex - 1] || null;
-    const deletedTaskId = selectedTaskId;
-
-    tasks = tasks.filter(t => t.id !== deletedTaskId);
-
-    let prevEnd = prevTask ? prevTask.end : new Date().toISOString().split("T")[0];
-
-    for (let i = 0; i < tasks.length; i++) {
-      if (i >= deletedIndex) {
-        tasks[i].start = prevEnd;
-        tasks[i].end = addDays(tasks[i].start, getTaskDuration(tasks[i]));
-      }
-      prevEnd = tasks[i].end;
-    }
-
-    selectedTaskId = null;
-    renderTabs();
-    renderTasks();
-  }
 };
-
-
-
 
 function renderColorSwatches(task) {
   const container = document.getElementById("taskColorPicker");
@@ -581,31 +543,14 @@ function showToast(msg) {
 };
 // <-- END of setupButtons()
 
-// === HELPERS ===
-function createTask(start = new Date().toISOString().split("T")[0]) {
-  const color = autoColorEnabled ? getNextColor() : "#F8961E";
-  return {
-    id: Date.now(),
-    name: "New Task",
-    start: start,
-    end: addDays(start, defaultDuration),
-    status: "future",
-    notes: "",
-    assigned: "",
-    color,
-    subtasks: [],
-    expanded: true
-  };
-}
+} // end of setupButtons()
 
-// ... other helper functions here ...
+function setupSettings() { ... }
 
-function dateToOffset(startDate, baseDate) {
-  const start = new Date(startDate);
-  const base = new Date(baseDate);
-  const diffDays = Math.floor((start - base) / (1000 * 60 * 60 * 24));
-  return Math.max(0, diffDays * zoomLevel);
-}
-; 
-// <-- END of document.addEventListener("DOMContentLoaded", ...)
+function setupTabControls() { ... }
 
+function renderTabs() { ... }
+
+...
+
+}); // end of document.addEventListener("DOMContentLoaded")

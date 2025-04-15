@@ -195,7 +195,7 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
     tasks.forEach(t => t.expanded = true);
     renderTasks();
   };
-}
+
 
 function setupSettings() {
   const toggle = document.getElementById("autoColorToggle");

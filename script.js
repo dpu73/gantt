@@ -236,7 +236,7 @@ function setupSettings() {
     };
   });
 }
-}
+
 
 function setupTabControls() {
   const tabs = ["project", "task", "subtask", "timeline"];

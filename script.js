@@ -399,14 +399,19 @@ function renderSubtaskEditor() {
     showToast("✅ Subtask updated");
   };
 
-  document.getElementById("deleteSubtask").onclick = () => {
-    const parent = findTaskById(selectedTaskId);
-    parent.subtasks = parent.subtasks.filter(s => s.id !== selectedSubtask.id);
-    selectedSubtask = null;
-    renderTabs();
-    renderTasks();
-    showToast("🗑️ Subtask deleted");
-  };
+ document.getElementById("deleteSubtask").onclick = () => {
+  if (!selectedTaskId || !selectedSubtask) return;
+
+  const parent = findTaskById(selectedTaskId);
+  if (!parent) return;
+
+  parent.subtasks = parent.subtasks.filter(s => s.id !== selectedSubtask.id);
+  selectedSubtask = null;
+  renderTabs();
+  renderTasks();
+  showToast("🗑️ Subtask deleted");
+};
+
 }
 
 

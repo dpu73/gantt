@@ -90,37 +90,43 @@ document.getElementById("newProject").onclick = () => {
   };
 
   // Task tab buttons
-  document.getElementById("addPrimaryStart").onclick = () => {
-    const last = tasks[tasks.length - 1];
-   const base = alignMode === "selected" && selectedTaskId
-  ? findTaskById(selectedTaskId).start
-  : (last?.start || new Date().toISOString().split("T")[0]);
+document.getElementById("addPrimaryStart").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selectedTask = selectedTaskId ? findTaskById(selectedTaskId) : null;
 
-    const task = createTask(base);
-    task.end = addDays(task.start, defaultDuration);
-    tasks.push(task);
-    renderTasks();
-    selectedTaskId = task.id;
-editorTab = "task";
-renderTabs();
+  const base = alignMode === "selected" && selectedTask
+    ? selectedTask.start
+    : last?.start || new Date().toISOString().split("T")[0];
 
-  };
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
 
-  document.getElementById("addPrimaryEnd").onclick = () => {
-    const last = tasks[tasks.length - 1];
-    const base = alignMode === "selected" && selectedTaskId
-  ? findTaskById(selectedTaskId).end
-  : (last?.end || new Date().toISOString().split("T")[0]);
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
 
-    const task = createTask(base);
-    task.end = addDays(task.start, defaultDuration);
-    tasks.push(task);
-    renderTasks();
-    selectedTaskId = task.id;
-editorTab = "task";
-renderTabs();
 
-  };
+document.getElementById("addPrimaryEnd").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selectedTask = selectedTaskId ? findTaskById(selectedTaskId) : null;
+
+  const base = alignMode === "selected" && selectedTask
+    ? selectedTask.end
+    : last?.end || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
+
 
 document.getElementById("deleteTaskFromEditor").onclick = () => {
   if (!selectedTaskId) return;

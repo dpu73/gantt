@@ -182,7 +182,7 @@ renderTasks();
 tasks = tasks.filter(t => t.id !== deletedId);
 
 // Find the task that should now be treated as the previous one
-const newIndex = tasks.findIndex((t, i) =>
+
   i > 0 && tasks[i - 1].id === deletedId
 );
 

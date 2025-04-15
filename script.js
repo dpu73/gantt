@@ -110,15 +110,26 @@ document.getElementById("newProject").onclick = () => {
     renderTasks();
   };
 
-  document.getElementById("deleteTaskFromEditor").onclick = () => {
-    if (!selectedTaskId) return;
-    if (confirm("Delete this task?")) {
-      tasks = tasks.filter(t => t.id !== selectedTaskId);
-      selectedTaskId = null;
-      renderTabs();
-      renderTasks();
+document.getElementById("deleteTaskFromEditor").onclick = () => {
+  if (!selectedTaskId) return;
+  if (confirm("Delete this task?")) {
+    const deletedTask = findTaskById(selectedTaskId);
+    const startIndex = tasks.findIndex(t => t.id === deletedTask.id);
+    tasks = tasks.filter(t => t.id !== selectedTaskId);
+
+    // Reposition remaining tasks
+    for (let i = startIndex; i < tasks.length; i++) {
+      const prev = tasks[i - 1];
+      tasks[i].start = prev.end;
+      tasks[i].end = addDays(tasks[i].start, getTaskDuration(tasks[i]));
     }
-  };
+
+    selectedTaskId = null;
+    renderTabs();
+    renderTasks();
+  }
+};
+
 
   // Subtask tab buttons
   document.getElementById("addSub").onclick = () => {

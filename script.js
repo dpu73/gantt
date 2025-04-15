@@ -118,13 +118,16 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
     tasks = tasks.filter(t => t.id !== selectedTaskId);
 
     // Slide remaining tasks forward
-    for (let i = deletedIndex; i < tasks.length; i++) {
-      const prev = tasks[i - 1];
-      if (prev) {
-        tasks[i].start = prev.end;
-        tasks[i].end = addDays(tasks[i].start, getTaskDuration(tasks[i]));
-      }
-    }
+let prevEnd = deletedIndex > 0
+  ? tasks[deletedIndex - 1].end
+  : new Date().toISOString().split("T")[0];
+
+for (let i = deletedIndex; i < tasks.length; i++) {
+  tasks[i].start = prevEnd;
+  tasks[i].end = addDays(tasks[i].start, getTaskDuration(tasks[i]));
+  prevEnd = tasks[i].end;
+}
+
 
     selectedTaskId = null;
     renderTabs();

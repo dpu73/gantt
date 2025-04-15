@@ -365,6 +365,28 @@ function renderTaskEditor() {
   };
 }
 
+function renderColorSwatches(task) {
+  const container = document.getElementById("taskColorPicker");
+  if (!container) return;
+  container.innerHTML = "";
+
+  taskColors.forEach(color => {
+    const swatch = document.createElement("div");
+    swatch.className = "color-swatch";
+    swatch.style.backgroundColor = color;
+
+    if (task.color === color) swatch.classList.add("selected");
+
+    swatch.onclick = () => {
+      task.color = color;
+      renderColorSwatches(task); // re-render to reflect selection
+      renderTasks(); // update timeline visuals
+    };
+
+    container.appendChild(swatch);
+  });
+}
+
 
 function renderSubtaskEditor() {
   const sub = selectedSubtask;

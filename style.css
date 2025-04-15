@@ -1,0 +1,191 @@
+/* Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ccc;
+  padding: 1rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  background: #eee;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.version-tag {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+main {
+  display: flex;
+  height: calc(100vh - 150px);
+  overflow: hidden;
+}
+
+#timeline {
+  flex: 3;
+  background: #fff;
+  padding: 1rem;
+  border-right: 1px solid #ccc;
+  overflow-x: auto;
+  overflow-y: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
+.task {
+  display: inline-block;
+  position: absolute;
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: #fff;
+  background: #999;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.task.selected {
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.3);
+}
+
+.subtask {
+  font-size: 0.85em;
+  background: #f3f3f3;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  margin-top: 0.2rem;
+}
+
+#editor {
+  flex: 1;
+  background: #f1f5f9;
+  border-left: 1px solid #ccc;
+  padding: 1rem;
+  min-width: 300px;
+  max-width: 450px;
+  overflow-y: auto;
+  display: block;
+}
+
+.editor-tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  background: #e8edf3;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  background: #d0d7e2;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  border-right: 1px solid #ccc;
+}
+
+.tab-btn:last-child {
+  border-right: none;
+}
+
+.tab-btn.active {
+  background: #ffffff;
+  color: #000;
+}
+
+.tab-btn.disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.tab-panel {
+  padding: 1rem;
+}
+
+.tab-panel.hidden {
+  display: none;
+}
+
+.tab-panel label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.tab-panel input,
+.tab-panel textarea,
+.tab-panel select {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.3rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+footer {
+  position: sticky;
+  bottom: 0;
+  padding: 0.5rem;
+  background: #fff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+footer button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+footer button:hover {
+  background: #ddd;
+}
+
+/* Color Picker Swatches */
+#taskColorPicker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.color-swatch.selected {
+  border: 2px solid #333;
+}

@@ -623,5 +623,6 @@ function dateToOffset(startDate, baseDate) {
   const diffDays = Math.floor((start - base) / (1000 * 60 * 60 * 24));
   return Math.max(0, diffDays * zoomLevel);
 }
-); // <-- END of document.addEventListener("DOMContentLoaded", ...)
+; 
+// <-- END of document.addEventListener("DOMContentLoaded", ...)
 

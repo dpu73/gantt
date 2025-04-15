@@ -140,21 +140,29 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
   if (!selectedTaskId) return;
 
   if (confirm("Delete this task?")) {
-    const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);
-    const prevTask = tasks[deletedIndex - 1] || null;
-    const deletedTaskId = selectedTaskId;
+    const deletedId = selectedTaskId;
 
-    tasks = tasks.filter(t => t.id !== deletedTaskId);
+    // 🔍 Store index before filtering
+    const deletedIndex = tasks.findIndex(t => t.id === deletedId);
+    tasks = tasks.filter(t => t.id !== deletedId);
 
-    let prevEnd = prevTask ? prevTask.end : new Date().toISOString().split("T")[0];
+    // 🔎 Find where to start reflow
+    const newIndex = tasks.findIndex((t, i) =>
+      i > 0 && tasks[i - 1].id === deletedId
+    );
+    const fixedIndex = newIndex === -1 ? 0 : newIndex;
 
-    for (let i = 0; i < tasks.length; i++) {
-      if (i >= deletedIndex) {
+    if (fixedIndex < tasks.length) {
+      let prevEnd = fixedIndex > 0
+        ? tasks[fixedIndex - 1].end
+        : new Date().toISOString().split("T")[0];
+
+      for (let i = fixedIndex; i < tasks.length; i++) {
         const duration = getTaskDuration(tasks[i]);
         tasks[i].start = prevEnd;
         tasks[i].end = addDays(tasks[i].start, duration);
+        prevEnd = tasks[i].end;
       }
-      prevEnd = tasks[i].end;
     }
 
     selectedTaskId = null;
@@ -162,6 +170,7 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
     renderTasks();
   }
 };
+
 
 // Slide remaining tasks forward
 

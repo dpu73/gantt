@@ -116,6 +116,7 @@ function setupButtons() {
     editorTab = "task";
     renderTabs();
     renderTasks();
+    
     document.getElementById("projectTitle").textContent = projectName;
   };
 
@@ -191,6 +192,29 @@ document.getElementById("addPrimaryStart").onclick = () => {
   renderTasks();
 };
 
+document.getElementById("addSub").onclick = () => {
+  if (!selectedTaskId) {
+    alert("Please select a primary task first.");
+    return;
+  }
+
+  const parent = findTaskById(selectedTaskId);
+  const sub = {
+    id: Date.now(),
+    name: "New Subtask",
+    start: parent.start,
+    end: addDays(parent.start, 2),
+    status: "future",
+    assigned: ""
+  };
+
+  parent.subtasks.push(sub);
+  selectedSubtask = sub;
+  editorTab = "subtask";
+  renderTabs();
+  renderTasks();
+};
+  
 document.getElementById("deleteTaskFromEditor").onclick = () => {
   if (!selectedTaskId) return;
   if (!confirm("Delete this task?")) return;

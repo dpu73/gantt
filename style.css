@@ -9,10 +9,12 @@ html, body {
 
 header {
   display: flex;
-  flex-direction: column;
-  background: #f8f9fa;
-  border-bottom: 1px solid #ccc;
-  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e2a38;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #333;
 }
 
 .header-left {
@@ -23,10 +25,24 @@ header {
 
 .header-right {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  align-items: center;
 }
+
+.version-tag {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+#toggleEditor {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: white;
+  font-size: 1.2rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 
 .button-group {
   display: flex;
@@ -61,6 +77,7 @@ main {
 .task {
   display: inline-block;
   position: absolute;
+  box-sizing: border-box;
   padding: 0.5rem;
   border-radius: 6px;
   color: #fff;
@@ -70,7 +87,9 @@ main {
 }
 
 .task.selected {
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.3);
+  outline: 3px solid #007bff;
+  background-color: #e6f0ff !important;
+  z-index: 2;
 }
 
 .subtask {
@@ -90,6 +109,7 @@ main {
   max-width: 450px;
   overflow-y: auto;
   display: block;
+  resize: horizontal;
 }
 
 .editor-tabs {

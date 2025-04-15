@@ -113,6 +113,7 @@ function setupButtons() {
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
     selectedTaskId = task.id;
+    selectedSubtask = null;
     editorTab = "task";
     renderTabs();
     renderTasks();

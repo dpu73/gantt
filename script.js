@@ -164,14 +164,18 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
 };
 
 // Slide remaining tasks forward
-const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);
-const prevTask = tasks[deletedIndex - 1] || null;
 
-tasks = tasks.filter(t => t.id !== selectedTaskId);
+const deletedId = selectedTaskId;
+tasks = tasks.filter(t => t.id !== deletedId);
 
-let prevEnd = prevTask ? prevTask.end : new Date().toISOString().split("T")[0];
+// Find the task that should now be treated as the previous one
+const newIndex = tasks.findIndex((t, i) =>
+  i > 0 && tasks[i - 1].id === deletedId
+);
 
-for (let i = deletedIndex; i < tasks.length; i++) {
+let prevEnd = (newIndex > 0) ? tasks[newIndex - 1].end : new Date().toISOString().split("T")[0];
+
+for (let i = newIndex; i < tasks.length; i++) {
   const duration = getTaskDuration(tasks[i]);
   tasks[i].start = prevEnd;
   tasks[i].end = addDays(tasks[i].start, duration);
@@ -530,10 +534,12 @@ function getNextColor() {
 }
 
 function getTaskDuration(task) {
+  if (!task || !task.start || !task.end) return 1; // fallback
   const start = new Date(task.start);
   const end = new Date(task.end);
   return Math.max(1, Math.floor((end - start) / (1000 * 60 * 60 * 24)));
 }
+
 
 function findTaskById(id) {
   return tasks.find(t => t.id === id);

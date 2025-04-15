@@ -184,7 +184,7 @@ tasks = tasks.filter(t => t.id !== deletedId);
 // Find the task that should now be treated as the previous one
 
   i > 0 && tasks[i - 1].id === deletedId
-);
+;
 
 let prevEnd = (newIndex > 0) ? tasks[newIndex - 1].end : new Date().toISOString().split("T")[0];
 

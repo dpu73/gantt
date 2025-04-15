@@ -118,6 +118,12 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
     tasks = tasks.filter(t => t.id !== selectedTaskId);
 
     // Slide remaining tasks forward
+
+console.log("Deleting:", selectedTaskId);
+console.log("Deleted Index:", deletedIndex);
+console.log("Remaining:", tasks.map(t => t.name));
+
+    
 document.getElementById("deleteTaskFromEditor").onclick = () => {
   if (!selectedTaskId) return;
 

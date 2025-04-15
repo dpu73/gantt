@@ -146,7 +146,7 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
     const deletedIndex = tasks.findIndex(t => t.id === deletedId);
     tasks = tasks.filter(t => t.id !== deletedId);
 
-    // 🔎 Find where to start reflow
+
     // 🔎 Find where to start reflow
 const newIndex = tasks.findIndex((t, i) =>
   i > 0 && tasks[i - 1].id === deletedId
@@ -178,7 +178,7 @@ renderTasks();
 
 // Slide remaining tasks forward
 
-const deletedId = selectedTaskId;
+
 tasks = tasks.filter(t => t.id !== deletedId);
 
 // Find the task that should now be treated as the previous one

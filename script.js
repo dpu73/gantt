@@ -27,17 +27,29 @@ function setupButtons() {
     document.getElementById("projectTitle").textContent = projectName;
   };
 
-  document.getElementById("newProject").onclick = () => {
-    if (!confirm("Start a new project? Unsaved data will be lost.")) return;
-    projectName = "Untitled Project";
-    tasks = [];
-    selectedTaskId = null;
-    selectedSubtask = null;
-    colorIndex = 0;
-    document.getElementById("projectTitle").textContent = projectName;
-    renderTabs();
-    renderTasks();
-  };
+document.getElementById("newProject").onclick = () => {
+  if (!confirm("Start a new project? Unsaved data will be lost.")) return;
+
+  projectName = "Untitled Project";
+  tasks = [];
+  selectedTaskId = null;
+  selectedSubtask = null;
+  colorIndex = 0;
+
+  // Add a default starter task
+  const base = new Date().toISOString().split("T")[0];
+  const task = createTask(base);
+  task.name = "Starter Task";
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+  selectedTaskId = task.id;
+
+  document.getElementById("projectTitle").textContent = projectName;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
+
 
   document.getElementById("importBtn").onclick = () => document.getElementById("fileInput").click();
 
@@ -213,7 +225,7 @@ function renderTabs() {
 function canAccessTab(tab) {
   switch (tab) {
     case "project": return true;
-    case "task": return !!selectedTaskId;
+    case "task": return !!selectedTaskId; || tasks.length === 0;
     case "subtask": return !!selectedSubtask;
     case "timeline": return !!projectName;
     default: return false;

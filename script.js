@@ -39,10 +39,13 @@ document.getElementById("newProject").onclick = () => {
   // Add a default starter task
   const base = new Date().toISOString().split("T")[0];
   const task = createTask(base);
-  task.name = "Starter Task";
+  task.name = "First Task";
   task.end = addDays(task.start, defaultDuration);
   tasks.push(task);
   selectedTaskId = task.id;
+    editorTab = "task";
+  renderTabs();
+  renderTasks();
 
   document.getElementById("projectTitle").textContent = projectName;
   editorTab = "task";

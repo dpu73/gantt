@@ -111,16 +111,16 @@ document.getElementById("addPrimaryStart").onclick = () => {
 
 document.getElementById("addPrimaryEnd").onclick = () => {
   const last = tasks[tasks.length - 1];
-  const selectedTask = selectedTaskId ? findTaskById(selectedTaskId) : null;
+  const task = createTask(
+    alignMode === "selected" && selectedTaskId
+      ? findTaskById(selectedTaskId).end
+      : last?.end || new Date().toISOString().split("T")[0]
+  );
 
-  const base = alignMode === "selected" && selectedTask
-    ? selectedTask.end
-    : last?.end || new Date().toISOString().split("T")[0];
-
-  const task = createTask(base);
   task.end = addDays(task.start, defaultDuration);
   tasks.push(task);
 
+  // 🔥 Set this new task as the selection
   selectedTaskId = task.id;
   editorTab = "task";
   renderTabs();

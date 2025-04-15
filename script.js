@@ -45,7 +45,7 @@ document.getElementById("newProject").onclick = () => {
   task.end = addDays(task.start, defaultDuration);
   tasks.push(task);
   console.log("Added task at:", task.start, "→", task.end);
-console.log("Now selected:", selectedTaskId);
+
 
   selectedTaskId = task.id;
     editorTab = "task";
@@ -402,8 +402,7 @@ function renderTaskEditor() {
     renderTasks();
     showToast("✅ Task updated");
   };
- document.getElementById("deleteTaskFromEditor").onclick = () => {
-  if (!selectedTaskId) return;
+
 
   if (confirm("Delete this task?")) {
     const deletedIndex = tasks.findIndex(t => t.id === selectedTaskId);

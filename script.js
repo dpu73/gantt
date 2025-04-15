@@ -591,10 +591,37 @@ function showToast(msg) {
   setTimeout(() => document.body.removeChild(toast), 2000);
 }
 
+    selectedTaskId = null;
+    renderTabs();
+    renderTasks();
+  }
+};
+} // <-- END of setupButtons()
+
+// === HELPERS ===
+function createTask(start = new Date().toISOString().split("T")[0]) {
+  const color = autoColorEnabled ? getNextColor() : "#F8961E";
+  return {
+    id: Date.now(),
+    name: "New Task",
+    start: start,
+    end: addDays(start, defaultDuration),
+    status: "future",
+    notes: "",
+    assigned: "",
+    color,
+    subtasks: [],
+    expanded: true
+  };
+}
+
+// ... other helper functions here ...
+
 function dateToOffset(startDate, baseDate) {
   const start = new Date(startDate);
   const base = new Date(baseDate);
   const diffDays = Math.floor((start - base) / (1000 * 60 * 60 * 24));
   return Math.max(0, diffDays * zoomLevel);
 }
-});
+}); // <-- END of document.addEventListener("DOMContentLoaded", ...)
+

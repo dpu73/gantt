@@ -7,6 +7,8 @@ let defaultDuration = 1;
 let autoColorEnabled = true;
 let colorIndex = 0;
 let zoomLevel = 300; // px per day
+let alignMode = "recent"; // or "selected"
+
 
 const taskColors = ["#F8961E", "#577590", "#43AA8B", "#9A5AFF", "#F94144", "#F3722C", "#43A047", "#6A1B9A"];
 
@@ -90,9 +92,10 @@ document.getElementById("newProject").onclick = () => {
   // Task tab buttons
   document.getElementById("addPrimaryStart").onclick = () => {
     const last = tasks[tasks.length - 1];
-    const base = selectedTaskId
-      ? findTaskById(selectedTaskId).start
-      : (last?.start || new Date().toISOString().split("T")[0]);
+   const base = alignMode === "selected" && selectedTaskId
+  ? findTaskById(selectedTaskId).start
+  : (last?.start || new Date().toISOString().split("T")[0]);
+
     const task = createTask(base);
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
@@ -105,9 +108,10 @@ renderTabs();
 
   document.getElementById("addPrimaryEnd").onclick = () => {
     const last = tasks[tasks.length - 1];
-    const base = selectedTaskId
-      ? findTaskById(selectedTaskId).end
-      : (last?.end || new Date().toISOString().split("T")[0]);
+    const base = alignMode === "selected" && selectedTaskId
+  ? findTaskById(selectedTaskId).end
+  : (last?.end || new Date().toISOString().split("T")[0]);
+
     const task = createTask(base);
     task.end = addDays(task.start, defaultDuration);
     tasks.push(task);
@@ -225,6 +229,13 @@ function setupSettings() {
     gridToggle.checked = true;
     gridToggle.onchange = () => renderTasks();
   }
+    // 🧭 Alignment Mode Setting (NEW!)
+  document.querySelectorAll('input[name="alignMode"]').forEach(radio => {
+    radio.onchange = e => {
+      alignMode = e.target.value;
+    };
+  });
+}
 }
 
 function setupTabControls() {

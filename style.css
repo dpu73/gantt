@@ -224,16 +224,25 @@ footer button:hover {
   margin-bottom: 1rem;
 }
 
+.swatch-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
 .color-swatch {
   width: 24px;
   height: 24px;
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid transparent;
+  transition: transform 0.2s;
 }
 
 .color-swatch.selected {
-  border: 2px solid #333;
+  outline: 2px solid black;
+  transform: scale(1.1);
 }
 
 .editor-buttons {

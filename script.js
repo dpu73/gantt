@@ -427,7 +427,7 @@ function renderTaskEditor() {
   }
 };
 
-  };
+
 
 
 function renderColorSwatches(task) {

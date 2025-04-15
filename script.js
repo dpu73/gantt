@@ -44,6 +44,9 @@ document.getElementById("newProject").onclick = () => {
   task.name = "First Task";
   task.end = addDays(task.start, defaultDuration);
   tasks.push(task);
+  console.log("Added task at:", task.start, "→", task.end);
+console.log("Now selected:", selectedTaskId);
+
   selectedTaskId = task.id;
     editorTab = "task";
   renderTabs();

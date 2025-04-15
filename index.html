@@ -49,12 +49,17 @@
 <div class="tab-panel hidden" id="panelTask">
   <h2>Primary Task Editor</h2>
 
-<button id="addPrimaryStart" title="Start Aligned">
-  <span>🡠</span><br>Add (Start)
-</button>
-<button id="addPrimaryEnd" title="End Aligned">
-  <span>🡢</span><br>Add (End)
-</button>
+<div class="editor-buttons">
+  <button id="addPrimaryStart" class="icon-button" title="Add to Start">
+    <svg viewBox="0 0 40 40"><path d="M25 10 L10 20 L25 30" stroke="black" stroke-width="3" fill="none" /></svg>
+    <span>Add Start</span>
+  </button>
+
+  <button id="addPrimaryEnd" class="icon-button" title="Add to End">
+    <svg viewBox="0 0 40 40"><path d="M15 10 L30 20 L15 30" stroke="black" stroke-width="3" fill="none" /></svg>
+    <span>Add End</span>
+  </button>
+</div>
 <button id="deleteTaskFromEditor" title="Delete">
   <span>🗑</span><br>Delete
 </button>

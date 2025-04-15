@@ -393,7 +393,7 @@ function renderTaskEditor() {
 };
 
   };
-}
+
 
 function renderColorSwatches(task) {
   const container = document.getElementById("taskColorPicker");

@@ -191,7 +191,7 @@ renderTasks();
     renderTabs();
     renderTasks();
   
-};
+;
 
 
 

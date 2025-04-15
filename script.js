@@ -163,6 +163,9 @@ selectedTaskId = null;
 renderTabs();
 renderTasks();
 
+  }
+  };
+
 
 
     selectedTaskId = null;
@@ -556,8 +559,4 @@ function dateToOffset(startDate, baseDate) {
   const base = new Date(baseDate);
   const diffDays = Math.floor((start - base) / (1000 * 60 * 60 * 24));
   return Math.max(0, diffDays * zoomLevel);
-}
-
-
-
 }

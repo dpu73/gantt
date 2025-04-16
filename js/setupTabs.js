@@ -1,6 +1,8 @@
 // js/setupTabs.js
 import { selectedTaskId, selectedSubtask } from './state.js';
 import { renderEditor } from './renderEditor.js';
+import { capitalize } from './helpers.js';
+
 
 export function setupTabs() {
   const tabs = ["project", "task", "subtask", "timeline"];

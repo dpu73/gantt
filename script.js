@@ -193,4 +193,3 @@ function setupButtons() {
     const editor = document.getElementById("editor");
     editor.style.display = editor.style.display === "none" ? "block" : "none";
   };
-}

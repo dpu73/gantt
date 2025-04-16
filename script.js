@@ -1,7 +1,5 @@
-// GANTT2 v0.3.0 — COMPLETE script.js
-// Patches: zoom, rename, subtask contrast + full original logic
+// ✅ GANTT2 - COMPLETE CLEAN script.js (with function placeholders)
 
-// STATE
 let tasks = [];
 let selectedTaskId = null;
 let selectedSubtask = null;
@@ -13,11 +11,12 @@ let colorIndex = 0;
 let zoomLevel = 300; // px per day
 let alignMode = "recent"; // or "selected"
 
-const taskColors = ["#F8961E","#577590","#43AA8B","#9A5AFF","#F94144","#F3722C","#43A047","#6A1B9A"];
+const taskColors = ["#F8961E", "#577590", "#43AA8B", "#9A5AFF", "#F94144", "#F3722C", "#43A047", "#6A1B9A"];
 
-// INIT
-document.addEventListener("DOMContentLoaded", ()=>{
-  document.getElementById("editor").style.display = "block";
+// === INIT ===
+document.addEventListener("DOMContentLoaded", () => {
+  const editor = document.getElementById("editor");
+  editor.style.display = "block";
   setupTabControls();
   setupButtons();
   setupSettings();
@@ -25,94 +24,182 @@ document.addEventListener("DOMContentLoaded", ()=>{
   renderTasks();
 });
 
-// PATCH: Zoom + Rename
-document.getElementById("zoomIn").onclick = ()=>{ 
-  zoomLevel = Math.min(zoomLevel+50,1000);
-  renderTasks();
-};
-document.getElementById("zoomOut").onclick = ()=>{
-  zoomLevel = Math.max(zoomLevel-50,50);
-  renderTasks();
-};
-document.getElementById("applyProjectName").onclick = ()=>{
-  const f = document.getElementById("projectNameField");
-  if(f && f.value.trim()){
-    projectName = f.value.trim();
-    document.getElementById("projectTitle").textContent = projectName;
-    showToast("📁 Project renamed");
-  }
-};
-
-// PATCH: Subtask Contrast
-const subtaskStyles = document.createElement("style");
-subtaskStyles.textContent = `
-  .subtask {
-    background-color: #e2e8f0 !important;
-    color: #1e293b !important;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    margin-top: 0.2rem;
-    font-size: 0.85em;
-  }
-`;
-document.head.appendChild(subtaskStyles);
-
-// TAB CONTROLS
-function setupTabControls(){
-  ["project","task","subtask","timeline"].forEach(tab=>{
-    const btn = document.getElementById("tab"+capitalize(tab));
-    btn.onclick = ()=>{
-      if(btn.classList.contains("disabled")) return;
+// === TAB SETUP ===
+function setupTabControls() {
+  const tabs = ["project", "task", "subtask", "timeline"];
+  tabs.forEach(tab => {
+    const btn = document.getElementById("tab" + capitalize(tab));
+    btn.onclick = () => {
+      if (btn.classList.contains("disabled")) return;
       editorTab = tab;
       renderTabs();
     };
   });
 }
-function renderTabs(){
-  const map = {
-    project:"panelProject",
-    task:"panelTask",
-    subtask:"panelSubtask",
-    timeline:"panelTimeline"
+
+function renderTabs() {
+  const tabMap = {
+    project: "panelProject",
+    task: "panelTask",
+    subtask: "panelSubtask",
+    timeline: "panelTimeline"
   };
-  for(let key in map){
-    const panel = document.getElementById(map[key]);
-    const btn = document.getElementById("tab"+capitalize(key));
-    const active = editorTab===key;
-    panel.classList.toggle("hidden",!active);
-    btn.classList.toggle("active",active);
-    btn.classList.toggle("disabled",!canAccessTab(key));
+
+   for (let key in tabMap) {
+    const panel = document.getElementById(tabMap[key]);
+    const btn = document.getElementById("tab" + capitalize(key));
+    const isActive = editorTab === key;
+    panel.classList.toggle("hidden", !isActive);
+    btn.classList.toggle("active", isActive);
+    btn.classList.toggle("disabled", !canAccessTab(key));
   }
-  if(editorTab==="task") renderTaskEditor();
-  if(editorTab==="subtask") renderSubtaskEditor();
+
+  if (editorTab === "task") renderTaskEditor();
+  if (editorTab === "subtask") renderSubtaskEditor();
 }
-function canAccessTab(tab){
-  switch(tab){
+
+function canAccessTab(tab) {
+  switch (tab) {
     case "project": return true;
-    case "task": return !!selectedTaskId || tasks.length===0;
+    case "task": return !!selectedTaskId || tasks.length === 0;
     case "subtask": return !!selectedTaskId;
     case "timeline": return !!projectName;
     default: return false;
   }
 }
 
-// SETTINGS
-function setupSettings(){
-  const t = document.getElementById("autoColorToggle");
-  if(t){ t.checked = true; t.onchange=e=>autoColorEnabled=e.target.checked; }
-  const d = document.getElementById("defaultDuration");
-  if(d){ d.onchange=e=>{
-    const v=parseInt(e.target.value);
-    if(!isNaN(v)) defaultDuration=v;
-  };}
-  const g = document.getElementById("gridToggle");
-  if(g){ g.checked = true; g.onchange=()=>renderTasks(); }
-  document.querySelectorAll('input[name="alignMode"]').forEach(r=>r.onchange=e=>alignMode=e.target.value);
+// === SETTINGS ===
+function setupSettings() {
+  const toggle = document.getElementById("autoColorToggle");
+  if (toggle) {
+    toggle.checked = true;
+    toggle.onchange = e => autoColorEnabled = e.target.checked;
+  }
+
+  const durationField = document.getElementById("defaultDuration");
+  if (durationField) {
+    durationField.onchange = e => {
+      const val = parseInt(e.target.value);
+      if (!isNaN(val)) defaultDuration = val;
+    };
+  }
+
+  const gridToggle = document.getElementById("gridToggle");
+  if (gridToggle) {
+    gridToggle.checked = true;
+    gridToggle.onchange = () => renderTasks();
+  }
+
+  document.querySelectorAll('input[name="alignMode"]').forEach(radio => {
+    radio.onchange = e => {
+      alignMode = e.target.value;
+    };
+  });
 }
 
-// BUTTON SETUP
-function setupButtons(){
-	document.getElementById("addSub").onclick = () => {
+// === BUTTON SETUP ===
+
+function setupButtons() {
+  document.getElementById("newProject").onclick = () => {
+    if (!confirm("Start a new project? Unsaved data will be lost.")) return;
+    projectName = "Untitled Project";
+    tasks = [];
+    selectedTaskId = null;
+    selectedSubtask = null;
+    colorIndex = 0;
+    const base = new Date().toISOString().split("T")[0];
+    const task = createTask(base);
+    task.name = "First Task";
+    task.end = addDays(task.start, defaultDuration);
+    tasks.push(task);
+    selectedTaskId = task.id;
+    selectedSubtask = null;
+    editorTab = "task";
+    renderTabs();
+    renderTasks();
+    
+    document.getElementById("projectTitle").textContent = projectName;
+  };
+
+  document.getElementById("importBtn").onclick = () =>
+    document.getElementById("fileInput").click();
+
+  document.getElementById("fileInput").onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+reader.onload = event => {
+  const data = JSON.parse(event.target.result);
+  tasks = data.tasks || [];
+  projectName = data.meta?.projectName || "Untitled Project";
+  document.getElementById("projectTitle").textContent = projectName;
+
+  selectedTaskId = tasks.length ? tasks[0].id : null;
+  selectedSubtask = null;
+  editorTab = "task";
+
+  renderTabs();
+  renderTasks();
+};
+
+    reader.readAsText(file);
+  };
+
+  document.getElementById("exportBtn").onclick = () => {
+    const blob = new Blob([JSON.stringify({ meta: { projectName }, tasks }, null, 2)], {
+      type: "application/json"
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${projectName.replace(/\s+/g, "_")}.json`;
+    link.click();
+  };
+
+  document.getElementById("toggleEditor").onclick = () => {
+    const editor = document.getElementById("editor");
+    editor.style.display = editor.style.display === "none" ? "block" : "none";
+  };
+
+document.getElementById("addPrimaryStart").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selectedTask = selectedTaskId ? findTaskById(selectedTaskId) : null;
+
+  const base = alignMode === "selected" && selectedTask
+    ? selectedTask.start
+    : last?.start || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
+
+  document.getElementById("addPrimaryEnd").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
+
+  const base = alignMode === "selected" && selected
+    ? selected.end
+    : last?.end || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  if (alignMode === "recent") {
+    selectedTaskId = task.id;
+    editorTab = "task";
+    renderTabs();
+  }
+
+  renderTasks();
+};
+
+document.getElementById("addSub").onclick = () => {
   if (!selectedTaskId) {
     alert("Please select a primary task first.");
     return;
@@ -133,168 +220,176 @@ function setupButtons(){
   editorTab = "subtask";
   renderTabs();
   renderTasks();
-  showToast("➕ Subtask added");
 };
+  
+document.getElementById("deleteTaskFromEditor").onclick = () => {
+  if (!selectedTaskId) return;
+  if (!confirm("Delete this task?")) return;
 
-  document.getElementById("newProject").onclick = ()=>{
-    if(!confirm("Start new project?")) return;
-    projectName="Untitled Project"; tasks=[]; selectedTaskId=null; selectedSubtask=null; colorIndex=0;
-    let base = new Date().toISOString().split("T")[0];
-    let t = createTask(base); t.name="First Task"; t.end=addDays(t.start,defaultDuration);
-    tasks.push(t); selectedTaskId=t.id; editorTab="task"; renderTabs(); renderTasks();
-    document.getElementById("projectTitle").textContent=projectName;
-  };
-  document.getElementById("importBtn").onclick = ()=>document.getElementById("fileInput").click();
-  document.getElementById("fileInput").onchange = e=>{
-    let file=e.target.files[0]; if(!file) return;
-    let r=new FileReader(); r.onload=ev=>{
-      let d=JSON.parse(ev.target.result);
-      tasks=d.tasks||[]; projectName=d.meta?.projectName||"Untitled Project";
-      document.getElementById("projectTitle").textContent=projectName;
-      selectedTaskId=tasks.length?tasks[0].id:null; selectedSubtask=null; editorTab="task";
-      renderTabs(); renderTasks();
-    }; r.readAsText(file);
-  };
-  document.getElementById("exportBtn").onclick = ()=>{
-    let blob=new Blob([JSON.stringify({meta:{projectName},tasks},null,2)],{type:"application/json"});
-    let link=document.createElement("a");
-    link.href=URL.createObjectURL(blob);
-    link.download=`${projectName.replace(/\s+/g,"_")}.json`;
-    link.click();
-  };
-  document.getElementById("toggleEditor").onclick = ()=>{
-    let ed=document.getElementById("editor");
-    ed.style.display = ed.style.display==="none"?"block":"none";
-  };
-  document.getElementById("addPrimaryStart").onclick = () => {
-  const last = tasks[tasks.length - 1];
-  const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
-  const base = alignMode === "selected" && selected
-    ? selected.start
-    : last?.start || new Date().toISOString().split("T")[0];
+  const deletedId = selectedTaskId;
+  const deletedIndex = tasks.findIndex(t => t.id === deletedId);
+  tasks = tasks.filter(t => t.id !== deletedId);
 
-  const task = createTask(base);
-  task.end = addDays(task.start, defaultDuration);
-  tasks.push(task);
+  const newIndex = tasks.findIndex((t, i) =>
+    i > 0 && tasks[i - 1].id === deletedId
+  );
+  const fixedIndex = newIndex === -1 ? 0 : newIndex;
 
-  selectedTaskId = task.id;
-  editorTab = "task";
+  if (fixedIndex < tasks.length) {
+    let prevEnd;
+    if (fixedIndex > 0 && tasks[fixedIndex - 1]) {
+      prevEnd = tasks[fixedIndex - 1].end;
+    } else {
+      prevEnd = new Date().toISOString().split("T")[0];
+    }
+
+    for (let i = fixedIndex; i < tasks.length; i++) {
+      const duration = getTaskDuration(tasks[i]);
+      tasks[i].start = prevEnd;
+      tasks[i].end = addDays(tasks[i].start, duration);
+      prevEnd = tasks[i].end;
+    }
+  }
+
+  selectedTaskId = null;
   renderTabs();
   renderTasks();
 };
 
-document.getElementById("addPrimaryEnd").onclick = () => {
-  const last = tasks[tasks.length - 1];
-  const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
-  const base = alignMode === "selected" && selected
-    ? selected.end
-    : last?.end || new Date().toISOString().split("T")[0];
+  
+  
+}
 
-  const task = createTask(base);
-  task.end = addDays(task.start, defaultDuration);
-  tasks.push(task);
+// === RENDERING ===
+function renderTasks() {
+  const timeline = document.getElementById("timeline");
+  timeline.innerHTML = "";
 
-  selectedTaskId = task.id;
-  editorTab = "task";
-  renderTabs();
-  renderTasks();
-};
+  if (!tasks.length) return;
 
-  document.getElementById("quickAddTask").onclick = () => {
-  const today = new Date().toISOString().split("T")[0];
-  const task = createTask(today);
-  task.name = "Quick Task";
-  task.end = addDays(task.start, defaultDuration);
-  tasks.push(task);
-  selectedTaskId = task.id;
-  editorTab = "task";
-  renderTabs();
-  renderTasks();
-  showToast("➕ Task added");
-};
-// QUICK ADD FIRST TASK
-const quickBtn = document.getElementById("quickAddTask");
-if (quickBtn) {
-  quickBtn.onclick = () => {
-    const base = new Date().toISOString().split("T")[0];
-    const task = createTask(base);
-    task.name = "Quick Task";
-    task.end = addDays(task.start, defaultDuration);
-    tasks.push(task);
-    selectedTaskId = task.id;
-    selectedSubtask = null;
-    editorTab = "task";
-    document.getElementById("projectTitle").textContent = projectName;
-    renderTabs();
+  const projectStart = tasks[0].start;
+  const wrapper = document.createElement("div");
+  wrapper.style.position = "relative";
+  wrapper.style.minHeight = "600px";
+  wrapper.style.width = (tasks.length * zoomLevel * defaultDuration + 500) + "px";
+
+  const showGrid = document.getElementById("gridToggle")?.checked;
+  wrapper.style.backgroundImage = showGrid
+    ? "linear-gradient(to right, #eee 1px, transparent 1px)"
+    : "none";
+  wrapper.style.backgroundSize = `${zoomLevel}px 100%`;
+
+  tasks.forEach((task, i) => {
+    const div = document.createElement("div");
+    div.className = "task";
+    if (task.id === selectedTaskId) {
+  div.classList.add("selected");
+}
+
+    div.style.backgroundColor = task.color || "#F8961E";
+    div.style.color = getContrastColor(task.color);
+    div.style.position = "absolute";
+    div.style.top = `${i * 80}px`;
+    div.style.left = dateToOffset(task.start, projectStart) + "px";
+    div.style.width = (zoomLevel * getTaskDuration(task)) + "px";
+    div.style.padding = "0.5rem";
+    div.style.borderRadius = "6px";
+    div.style.boxShadow = task.id === selectedTaskId
+      ? "0 0 0 3px rgba(0,0,0,0.3)"
+      : "none";
+
+let subtaskHTML = "";
+if (task.expanded !== false && task.subtasks?.length) {
+  subtaskHTML = task.subtasks.map(st => {
+    const isSelected = selectedSubtask && st.id === selectedSubtask.id;
+    return '<div class="subtask' + (isSelected ? ' selected' : '') + '" ' +
+           'onclick="editSubtask(' + JSON.stringify(task.id) + ',' + JSON.stringify(st.id) + '); event.stopPropagation();">' +
+           '- ' + st.name +
+           '</div>';
+  }).join("");
+}
+
+div.innerHTML = `
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <strong>${task.name}</strong>
+    ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
+  </div>
+  <div style="font-size:0.9em;">🕓 ${task.start} → ${task.end}</div>
+  ${subtaskHTML}
+`;
+
+div.innerHTML = `
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <strong>${task.name}</strong>
+    ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
+  </div>
+  <div style="font-size:0.9em;">🕓 ${task.start} → ${task.end}</div>
+  ${subtaskHTML}
+`;
+
+div.onclick = () => {
+      selectedTaskId = task.id;
+      selectedSubtask = null;
+      editorTab = "task";
+      renderTabs();
+        renderTasks();
+    };
+
+// === DRAG-TO-MOVE LOGIC ===
+div.onmousedown = (e) => {
+  if (e.button !== 0) return; // left-click only
+
+  const startX = e.clientX;
+  const originalStart = new Date(task.start);
+  const originalEnd = new Date(task.end);
+  const durationDays = getTaskDuration(task);
+
+  const onMouseMove = (moveEvent) => {
+    const deltaPx = moveEvent.clientX - startX;
+    const deltaDays = Math.round(deltaPx / zoomLevel);
+
+const newStart = addDays(originalStart.toISOString().split("T")[0], deltaDays);
+
+// Prevent moving before project start
+if (new Date(newStart) < new Date(tasks[0].start) && task !== tasks[0]) return;
+
+    task.start = newStart;
+    task.end = addDays(task.start, durationDays);
     renderTasks();
-    showToast("➕ Quick task added");
   };
-}
 
-}
+  const onMouseUp = () => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+    showToast("🟦 Task moved");
+  };
 
-// RENDERING
-function renderTasks(){
-  let tl=document.getElementById("timeline");
-  tl.innerHTML="";
-  if(!tasks.length) return;
-  let start0=tasks[0].start;
-  let wrap=document.createElement("div");
-  wrap.style.position="relative";
-  wrap.style.minHeight="600px";
-  wrap.style.width=(tasks.length*zoomLevel*defaultDuration+500)+"px";
-  let showG=document.getElementById("gridToggle")?.checked;
-  wrap.style.backgroundImage= showG
-    ?"linear-gradient(to right,#eee 1px,transparent 1px)"
-    :"none";
-  wrap.style.backgroundSize=`${zoomLevel}px 100%`;
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+};
 
-  tasks.forEach((task,i)=>{
-    let div=document.createElement("div");
-    div.className="task"+(task.id===selectedTaskId?" selected":"");
-    div.style.backgroundColor=task.color||"#F8961E";
-    div.style.color=getContrastColor(task.color);
-    div.style.position="absolute";
-    div.style.top=`${i*80}px`;
-    div.style.left=`${dateToOffset(task.start,start0)}px`;
-    div.style.width=`${zoomLevel*getTaskDuration(task)}px`;
-    div.style.padding="0.5rem"; div.style.borderRadius="6px";
-    div.style.boxShadow=task.id===selectedTaskId?"0 0 0 3px rgba(0,0,0,0.3)":"none";
-    div.innerHTML = `<strong>${task.name}</strong><br><small>🕓 ${task.start} → ${task.end}</small>`;
-    div.onclick=()=>{ selectedTaskId=task.id; selectedSubtask=null; editorTab="task"; renderTabs(); renderTasks(); };
-    wrap.appendChild(div);
+
+    wrapper.appendChild(div);
   });
-  tl.appendChild(wrap);
+
+  timeline.appendChild(wrapper);
 }
 
-// TASK HELPERS
-function createTask(start=new Date().toISOString().split("T")[0]){
-  let col=autoColorEnabled?getNextColor():"#F8961E";
-  return { id:Date.now(), name:"New Task", start, end:addDays(start,defaultDuration),
-           status:"future", notes:"", assigned:"", color:col, subtasks:[], expanded:true };
-}
-function getNextColor(){ let c=taskColors[colorIndex%taskColors.length]; colorIndex++; return c;}
-function getTaskDuration(t){ if(!t||!t.start||!t.end) return 1; let s=new Date(t.start), e=new Date(t.end);
-  return Math.max(1,Math.floor((e-s)/(1000*60*60*24))); }
-function addDays(ds,d){ let dt=new Date(ds); dt.setDate(dt.getDate()+d); return dt.toISOString().split("T")[0]; }
-function getContrastColor(h){ let r=parseInt(h.substr(1,2),16),g=parseInt(h.substr(3,2),16),b=parseInt(h.substr(5,2),16);
-  let bright=(r*299+g*587+b*114)/1000; return bright>128?"#000":"#FFF"; }
-function dateToOffset(s,b){ let st=new Date(s), bs=new Date(b);
-  let dd=Math.floor((st-bs)/(1000*60*60*24)); return Math.max(0,dd*zoomLevel); }
-function showToast(m){ let t=document.createElement("div"); t.textContent=m;
-  Object.assign(t.style,{position:"fixed",bottom:"10px",right:"10px",background:"#4caf50",color:"white",
-                         padding:"0.5rem 1rem",borderRadius:"6px",zIndex:"9999"});
-  document.body.appendChild(t); setTimeout(()=>t.remove(),2000);
-}
+function editSubtask(taskId, subId) {
+  const task = findTaskById(taskId);
+  if (!task) return;
 
-// UTILITY
-function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-function findTaskById(id) {
-  return tasks.find(t => t.id === id);
+  const sub = task.subtasks.find(s => s.id === subId);
+  if (!sub) return;
+
+  selectedTaskId = taskId;
+  selectedSubtask = sub;
+  editorTab = "subtask";
+  renderTabs();
 }
 
 function renderTaskEditor() {
-  const task = tasks.find(t => t.id === selectedTaskId);
+  const task = findTaskById(selectedTaskId);
   if (!task) return;
 
   const container = document.getElementById("taskFields");
@@ -310,11 +405,12 @@ function renderTaskEditor() {
         <option value="complete">Complete</option>
       </select>
     </label>
-    <label>Notes: <textarea id="taskNotes">${task.notes || ""}</textarea></label>
-    <label>Assigned To: <input id="taskAssigned" type="text" value="${task.assigned || ""}" /></label>
+    <label>Notes: <textarea id="taskNotes">${task.notes}</textarea></label>
+    <label>Assigned To: <input id="taskAssigned" type="text" value="${task.assigned}" /></label>
   `;
 
   document.getElementById("taskStatus").value = task.status;
+
   document.getElementById("taskName").oninput = e => task.name = e.target.value;
   document.getElementById("taskStart").onchange = e => task.start = e.target.value;
   document.getElementById("taskEnd").onchange = e => task.end = e.target.value;
@@ -322,11 +418,39 @@ function renderTaskEditor() {
   document.getElementById("taskNotes").oninput = e => task.notes = e.target.value;
   document.getElementById("taskAssigned").oninput = e => task.assigned = e.target.value;
 
+  // Optional color picker placeholder container
+  const swatchBox = document.getElementById("taskColorPicker");
+  if (swatchBox) swatchBox.innerHTML = "";
+
   document.getElementById("applyTaskChanges").onclick = () => {
     renderTasks();
     showToast("✅ Task updated");
   };
 }
+
+function renderColorSwatches(task) {
+  const container = document.getElementById("taskColorPicker");
+  if (!container) return;
+  container.innerHTML = "";
+
+  taskColors.forEach(color => {
+    const swatch = document.createElement("div");
+    swatch.className = "color-swatch";
+    swatch.style.backgroundColor = color;
+
+    if (task.color === color) swatch.classList.add("selected");
+
+    swatch.onclick = () => {
+      task.color = color;
+      renderColorSwatches(task); // re-render to reflect selection
+      renderTasks(); // update timeline visuals
+    };
+
+    container.appendChild(swatch);
+  });
+}
+
+
 function renderSubtaskEditor() {
   const sub = selectedSubtask;
   if (!sub) return;
@@ -348,6 +472,7 @@ function renderSubtaskEditor() {
   `;
 
   document.getElementById("subStatus").value = sub.status;
+
   document.getElementById("subName").oninput = e => sub.name = e.target.value;
   document.getElementById("subStart").onchange = e => sub.start = e.target.value;
   document.getElementById("subEnd").onchange = e => sub.end = e.target.value;
@@ -359,16 +484,114 @@ function renderSubtaskEditor() {
     showToast("✅ Subtask updated");
   };
 
-  document.getElementById("deleteSubtask").onclick = () => {
-    if (!selectedTaskId || !selectedSubtask) return;
+ document.getElementById("deleteSubtask").onclick = () => {
+  if (!selectedTaskId || !selectedSubtask) return;
 
-    const parent = findTaskById(selectedTaskId);
-    if (!parent) return;
+  const parent = findTaskById(selectedTaskId);
+  if (!parent) return;
 
-    parent.subtasks = parent.subtasks.filter(s => s.id !== selectedSubtask.id);
-    selectedSubtask = null;
-    renderTabs();
-    renderTasks();
-    showToast("🗑️ Subtask deleted");
+  parent.subtasks = parent.subtasks.filter(s => s.id !== selectedSubtask.id);
+  selectedSubtask = null;
+  renderTabs();
+  renderTasks();
+  showToast("🗑️ Subtask deleted");
+};
+
+}
+
+
+// === HELPERS ===
+function createTask(start = new Date().toISOString().split("T")[0]) {
+  const color = autoColorEnabled ? getNextColor() : "#F8961E";
+  return {
+    id: Date.now(),
+    name: "New Task",
+    start: start,
+    end: addDays(start, defaultDuration),
+    status: "future",
+    notes: "",
+    assigned: "",
+    color,
+    subtasks: [],
+    expanded: true
   };
+}
+
+function getNextColor() {
+  const color = taskColors[colorIndex % taskColors.length];
+  colorIndex++;
+  return color;
+}
+
+function getTaskDuration(task) {
+  if (!task || !task.start || !task.end) return 1;
+  const start = new Date(task.start);
+  const end = new Date(task.end);
+  return Math.max(1, Math.floor((end - start) / (1000 * 60 * 60 * 24)));
+}
+
+function findTaskById(id) {
+  return tasks.find(t => t.id === id);
+}
+
+function addDays(dateStr, days) {
+  const date = new Date(dateStr);
+  date.setDate(date.getDate() + days);
+  return date.toISOString().split("T")[0];
+}
+
+function getContrastColor(hex) {
+  const r = parseInt(hex.substr(1, 2), 16);
+  const g = parseInt(hex.substr(3, 2), 16);
+  const b = parseInt(hex.substr(5, 2), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 128 ? "#000000" : "#FFFFFF";
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.textContent = msg;
+  toast.style.position = "fixed";
+  toast.style.bottom = "10px";
+  toast.style.right = "10px";
+  toast.style.background = "#4caf50";
+  toast.style.color = "white";
+  toast.style.padding = "0.5rem 1rem";
+  toast.style.borderRadius = "6px";
+  toast.style.zIndex = "9999";
+  document.body.appendChild(toast);
+  setTimeout(() => document.body.removeChild(toast), 2000);
+}
+
+function dateToOffset(startDate, baseDate) {
+  const start = new Date(startDate);
+  const base = new Date(baseDate);
+  const diffDays = Math.floor((start - base) / (1000 * 60 * 60 * 24));
+  return Math.max(0, diffDays * zoomLevel);
+}
+
+// === Edit subtask logic ===
+function editSubtask(taskId, subId) {
+  const task = findTaskById(taskId);
+  if (!task) return;
+  const sub = task.subtasks.find(s => s.id === subId);
+  if (!sub) return;
+
+  selectedTaskId = taskId;
+  selectedSubtask = sub;
+  editorTab = "subtask";
+  renderTabs();
+}
+
+// === Toggle task subtasks open/closed ===
+function toggleSubtasks(taskId) {
+  const task = findTaskById(taskId);
+  if (task) {
+    task.expanded = !task.expanded;
+    renderTasks();
+  }
 }

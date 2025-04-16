@@ -369,6 +369,33 @@ if (new Date(newStart) < new Date(tasks[0].start) && task !== tasks[0]) return;
 };
 
 
+    
+    // === Subtask bar rendering ===
+    if (task.expanded !== false && task.subtasks?.length) {
+      task.subtasks.forEach(sub => {
+        const subDiv = document.createElement("div");
+        subDiv.className = "subtask-bar";
+        const taskStart = new Date(task.start);
+        const subStart = new Date(sub.start);
+        const subEnd = new Date(sub.end);
+
+        const offsetDays = Math.max(0, Math.floor((subStart - taskStart) / (1000 * 60 * 60 * 24)));
+        const durationDays = Math.max(1, Math.floor((subEnd - subStart) / (1000 * 60 * 60 * 24)));
+
+        subDiv.style.position = "absolute";
+        subDiv.style.left = (offsetDays * zoomLevel) + "px";
+        subDiv.style.top = "3rem";
+        subDiv.style.height = "1rem";
+        subDiv.style.width = (durationDays * zoomLevel) + "px";
+        subDiv.style.background = "#ccc";
+        subDiv.style.borderRadius = "4px";
+        subDiv.style.boxShadow = "inset 0 0 0 1px #999";
+        subDiv.title = sub.name;
+
+        div.appendChild(subDiv);
+      });
+    }
+
     wrapper.appendChild(div);
   });
 

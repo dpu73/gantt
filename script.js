@@ -142,6 +142,19 @@ function setupButtons(){
     let ed=document.getElementById("editor");
     ed.style.display = ed.style.display==="none"?"block":"none";
   };
+  document.getElementById("quickAddTask").onclick = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const task = createTask(today);
+  task.name = "Quick Task";
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+  showToast("➕ Task added");
+};
+
 }
 
 // RENDERING

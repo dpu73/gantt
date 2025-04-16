@@ -332,6 +332,7 @@ div.innerHTML = `
       selectedSubtask = null;
       editorTab = "task";
       renderTabs();
+        renderTasks();
     };
 
     wrapper.appendChild(div);

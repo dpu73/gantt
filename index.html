@@ -31,10 +31,69 @@
       <button class="tab-btn disabled" id="tabTimeline">⚙️ Timeline</button>
     </div>
 
-    <div class="tab-panel" id="panelProject"></div>
-    <div class="tab-panel hidden" id="panelTask"></div>
-    <div class="tab-panel hidden" id="panelSubtask"></div>
-    <div class="tab-panel hidden" id="panelTimeline"></div>
+    <div class="tab-panel" id="panelProject">
+      <h2>Project Editor</h2>
+      <label>Project Name: <input type="text" id="projectNameField" /></label>
+      <button id="applyProjectName">✔ Apply Project Name</button>
+      <hr />
+      <button id="newProject">🧹 New Project</button>
+      <button id="importBtn">📥 Import</button>
+      <button id="exportBtn">📤 Export</button>
+      <hr />
+      <button id="quickAddTask">➕ Add First Task</button>
+    </div>
+
+    <div class="tab-panel hidden" id="panelTask">
+      <h2>Primary Task Editor</h2>
+      <div class="editor-buttons">
+        <button id="addPrimaryStart" class="icon-button" title="Add to Start">
+          <svg viewBox="0 0 40 40"><path d="M25 10 L10 20 L25 30" stroke="black" stroke-width="3" fill="none" /></svg>
+          <span>Add Start</span>
+        </button>
+        <button id="addPrimaryEnd" class="icon-button" title="Add to End">
+          <svg viewBox="0 0 40 40"><path d="M15 10 L30 20 L15 30" stroke="black" stroke-width="3" fill="none" /></svg>
+          <span>Add End</span>
+        </button>
+      </div>
+      <button id="deleteTaskFromEditor" title="Delete">
+        <span>🗑</span><br>Delete
+      </button>
+      <button id="applyTaskChanges" title="Apply">
+        <span>💾</span><br>Apply
+      </button>
+      <div id="taskColorPicker" class="swatch-container"></div>
+      <div id="taskFields"></div>
+    </div>
+
+    <div class="tab-panel hidden" id="panelSubtask">
+      <h2>Subtask Editor</h2>
+      <button id="addSub" title="Add Subtask">
+        <span>🡠</span><br>➕ Add Subtask
+      </button>
+      <button id="deleteSubtask" title="Delete Subtask">
+        <span>🗑</span><br>🗑 Delete Subtask
+      </button>
+      <button id="applySubtaskChanges">✅ Apply Subtask</button>
+      <div id="subtaskFields"></div>
+    </div>
+
+    <div class="tab-panel hidden" id="panelTimeline">
+      <h2>Timeline Settings</h2>
+      <label>Default Task Duration:
+        <input type="number" id="defaultDuration" value="1" min="1" style="max-width: 4ch;" />
+      </label>
+      <label>Auto-Assign Colors:
+        <input type="checkbox" id="autoColorToggle" checked />
+      </label>
+      <label>Show Timeline Grid:
+        <input type="checkbox" id="gridToggle" checked />
+      </label>
+      <label>Task Creation Alignment:</label>
+      <div style="margin-left: 1rem;">
+        <label><input type="radio" name="alignMode" value="recent" checked /> Anchor to newest task</label><br>
+        <label><input type="radio" name="alignMode" value="selected" /> Anchor to selected task</label>
+      </div>
+    </div>
   </aside>
 </main>
 

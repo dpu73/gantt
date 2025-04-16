@@ -1,8 +1,15 @@
 // js/renderTasks.js
-//import { tasks, selectedTaskId, selectedSubtask, zoomLevel } from './state.js';
+
 import { state } from './state.js';
 import { renderEditor } from './renderEditor.js';
-import { getTaskDuration, getContrastColor, dateToOffset, addDays } from './helpers.js';
+import {
+  getTaskDuration,
+  getContrastColor,
+  dateToOffset,
+  addDays
+} from './helpers.js';
+
+
 state.tasks.forEach((task) => {
   if (task.id === state.selectedTaskId) ...
 });

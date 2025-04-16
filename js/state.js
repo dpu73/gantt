@@ -16,18 +16,6 @@ export const state = {
   alignMode: "recent"
 };
 
-export function initState() {
-  state.projectName = "Untitled Project";
-  state.tasks = [];
-  state.selectedTaskId = null;
-  state.selectedSubtask = null;
-  state.defaultDuration = 1;
-  state.autoColorEnabled = true;
-  state.zoomLevel = 300;
-  state.alignMode = "recent";
-}
-
-
 // Settings
 export let defaultDuration = 1;
 export let autoColorEnabled = true;
@@ -42,12 +30,12 @@ export const taskColors = [
 
 // 🔧 Basic initializer (can expand later)
 export function initState() {
-  tasks = [];
-  selectedTaskId = null;
-  selectedSubtask = null;
-  projectName = "Untitled Project";
-  defaultDuration = 1;
-  autoColorEnabled = true;
-  zoomLevel = 300;
-  alignMode = "recent";
+  state.projectName = "Untitled Project";
+  state.tasks = [];
+  state.selectedTaskId = null;
+  state.selectedSubtask = null;
+  state.defaultDuration = 1;
+  state.autoColorEnabled = true;
+  state.zoomLevel = 300;
+  state.alignMode = "recent";
 }

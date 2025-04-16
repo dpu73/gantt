@@ -297,16 +297,15 @@ function renderTasks() {
         <strong>${task.name}</strong>
         ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
       </div>
-? task.subtasks.map(st => `
- 
-      //this is where we copied code
-      
-      <div class="${'subtask ' + (selectedSubtask && st.id === selectedSubtask.id ? 'selected' : '')}" ...>
-
-       onclick="editSubtask(${task.id}, ${st.id}); event.stopPropagation();">
-    - ${st.name}
-  </div>
-`).join("")
+? task.subtasks.map(st => {
+    const isSelected = selectedSubtask && st.id === selectedSubtask.id;
+    return `
+      <div class="subtask${isSelected ? ' selected' : ''}"
+           onclick="editSubtask(${task.id}, ${st.id}); event.stopPropagation();">
+        - ${st.name}
+      </div>
+    `;
+  }).join("")
 
         : ""}
     `;

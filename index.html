@@ -22,7 +22,20 @@
 
 <main>
   <section id="timeline"></section>
-  <aside id="editor"> <!-- Left intact from previous version --> </aside>
+
+  <aside id="editor">
+    <div class="editor-tabs">
+      <button class="tab-btn active" id="tabProject">📁 Project</button>
+      <button class="tab-btn disabled" id="tabTask">🧱 Task</button>
+      <button class="tab-btn disabled" id="tabSubtask">🧷 Subtask</button>
+      <button class="tab-btn disabled" id="tabTimeline">⚙️ Timeline</button>
+    </div>
+
+    <div class="tab-panel" id="panelProject"></div>
+    <div class="tab-panel hidden" id="panelTask"></div>
+    <div class="tab-panel hidden" id="panelSubtask"></div>
+    <div class="tab-panel hidden" id="panelTimeline"></div>
+  </aside>
 </main>
 
 <footer>

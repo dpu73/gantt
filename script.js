@@ -384,13 +384,16 @@ if (new Date(newStart) < new Date(tasks[0].start) && task !== tasks[0]) return;
 
         subDiv.style.position = "absolute";
         subDiv.style.left = (offsetDays * zoomLevel) + "px";
-        subDiv.style.top = "3rem";
+        subDiv.style.top = "1.8rem";
         subDiv.style.height = "1rem";
         subDiv.style.width = (durationDays * zoomLevel) + "px";
         subDiv.style.background = "#ccc";
         subDiv.style.borderRadius = "4px";
         subDiv.style.boxShadow = "inset 0 0 0 1px #999";
         subDiv.title = sub.name;
+		subDiv.style.background = "#fef08a"; // a soft yellow
+subDiv.style.border = "1px solid #999";
+subDiv.style.height = "0.75rem";
 
         div.appendChild(subDiv);
       });

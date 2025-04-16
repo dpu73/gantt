@@ -44,3 +44,8 @@ export function showToast(msg) {
   document.body.appendChild(toast);
   setTimeout(() => document.body.removeChild(toast), 2000);
 }
+
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+

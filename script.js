@@ -299,13 +299,12 @@ function renderTasks() {
       </div>
 ? task.subtasks.map(st => {
     const isSelected = selectedSubtask && st.id === selectedSubtask.id;
-    return `
-      <div class="subtask${isSelected ? ' selected' : ''}"
-           onclick="editSubtask(${task.id}, ${st.id}); event.stopPropagation();">
-        - ${st.name}
-      </div>
-    `;
+    return '<div class="subtask' + (isSelected ? ' selected' : '') + '" ' +
+           'onclick="editSubtask(' + task.id + ',' + st.id + '); event.stopPropagation();">' +
+           '- ' + st.name +
+           '</div>';
   }).join("")
+
 
         : ""}
     `;

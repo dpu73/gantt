@@ -292,18 +292,26 @@ function renderTasks() {
       ? "0 0 0 3px rgba(0,0,0,0.3)"
       : "none";
 
-    div.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong>${task.name}</strong>
-        ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
-      </div>
-? task.subtasks.map(st => {
+   let subtaskHTML = "";
+if (task.expanded !== false && task.subtasks?.length) {
+  subtaskHTML = task.subtasks.map(st => {
     const isSelected = selectedSubtask && st.id === selectedSubtask.id;
     return '<div class="subtask' + (isSelected ? ' selected' : '') + '" ' +
            'onclick="editSubtask(' + task.id + ',' + st.id + '); event.stopPropagation();">' +
            '- ' + st.name +
            '</div>';
-  }).join("")
+  }).join("");
+}
+
+div.innerHTML = `
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <strong>${task.name}</strong>
+    ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
+  </div>
+  <div style="font-size:0.9em;">🕓 ${task.start} → ${task.end}</div>
+  ${subtaskHTML}
+`;
+
 
 
         : ""}

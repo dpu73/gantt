@@ -10,11 +10,6 @@ import {
 } from './helpers.js';
 
 
-state.tasks.forEach((task) => {
-  if (task.id === state.selectedTaskId) ...
-});
-
-
 export function renderTasks() {
   const timeline = document.getElementById("timeline");
   if (!timeline) return;
@@ -27,6 +22,8 @@ export function renderTasks() {
   wrapper.style.position = "relative";
   wrapper.style.minHeight = "600px";
   wrapper.style.width = (tasks.length * zoomLevel * 2 + 1000) + "px";
+
+
 
   const showGrid = document.getElementById("gridToggle")?.checked;
   wrapper.style.backgroundImage = showGrid

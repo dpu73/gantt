@@ -327,13 +327,43 @@ div.innerHTML = `
   ${subtaskHTML}
 `;
 
-    div.onclick = () => {
+div.onclick = () => {
       selectedTaskId = task.id;
       selectedSubtask = null;
       editorTab = "task";
       renderTabs();
         renderTasks();
     };
+
+// === DRAG-TO-MOVE LOGIC ===
+div.onmousedown = (e) => {
+  if (e.button !== 0) return; // left-click only
+
+  const startX = e.clientX;
+  const originalStart = new Date(task.start);
+  const originalEnd = new Date(task.end);
+  const durationDays = getTaskDuration(task);
+
+  const onMouseMove = (moveEvent) => {
+    const deltaPx = moveEvent.clientX - startX;
+    const deltaDays = Math.round(deltaPx / zoomLevel);
+
+    const newStart = addDays(originalStart.toISOString().split("T")[0], deltaDays);
+    task.start = newStart;
+    task.end = addDays(task.start, durationDays);
+    renderTasks();
+  };
+
+  const onMouseUp = () => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+    showToast("🟦 Task moved");
+  };
+
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+};
+
 
     wrapper.appendChild(div);
   });

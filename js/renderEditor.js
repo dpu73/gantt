@@ -1,15 +1,8 @@
+// js/renderEditor.js
 import { state } from './state.js';
-
 import { renderTasks } from './renderTasks.js';
-import { showToast } from './helpers.js';
+import { renderTabs } from './setupTabs.js';
 
-// 🔧 Update project name display
-function updateProjectHeader() {
-  const title = document.getElementById("projectTitle");
-  if (title) title.textContent = projectName;
-}
-
-// 🔧 Inject editor fields based on selection
 export function renderEditor() {
   const container = document.getElementById("editorFields");
   const projectTools = document.getElementById("projectToolbar");
@@ -24,29 +17,31 @@ export function renderEditor() {
   taskTools?.classList.add("hidden");
   subtaskTools?.classList.add("hidden");
 
-  updateProjectHeader();
+  // Update project name
+  const title = document.getElementById("projectTitle");
+  if (title) title.textContent = state.projectName;
 
-  // --- Project view (default)
-  if (!selectedTaskId && !selectedSubtask) {
+  // --- Project view
+  if (!state.selectedTaskId && !state.selectedSubtask) {
     projectTools?.classList.remove("hidden");
 
     container.innerHTML = `
       <label>Project Name:
-        <input type="text" id="projectNameField" value="${projectName}" />
+        <input type="text" id="projectNameField" value="${state.projectName}" />
       </label>
     `;
 
     document.getElementById("projectNameField").oninput = (e) => {
-      const newName = e.target.value;
-      document.getElementById("projectTitle").textContent = newName;
+      state.projectName = e.target.value;
+      title.textContent = state.projectName;
     };
 
     return;
   }
 
   // --- Subtask view
-  if (selectedSubtask) {
-    const sub = selectedSubtask;
+  if (state.selectedSubtask) {
+    const sub = state.selectedSubtask;
     subtaskTools?.classList.remove("hidden");
 
     container.innerHTML = `
@@ -71,11 +66,13 @@ export function renderEditor() {
     document.getElementById("subEnd").onchange = e => sub.end = e.target.value;
     document.getElementById("subStatus").onchange = e => sub.status = e.target.value;
     document.getElementById("subAssigned").oninput = e => sub.assigned = e.target.value;
+
+    renderTabs();
     return;
   }
 
-  // --- Primary task view
-  const task = tasks.find(t => t.id === selectedTaskId);
+  // --- Primary Task view
+  const task = state.tasks.find(t => t.id === state.selectedTaskId);
   if (!task) return;
 
   taskTools?.classList.remove("hidden");
@@ -105,5 +102,6 @@ export function renderEditor() {
   document.getElementById("taskNotes").oninput = e => task.notes = e.target.value;
   document.getElementById("taskAssigned").oninput = e => task.assigned = e.target.value;
 
+  renderTabs();
   renderTasks();
 }

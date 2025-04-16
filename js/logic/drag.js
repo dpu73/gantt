@@ -1,10 +1,11 @@
+// js/logic/drag.js
 import { state } from '../state.js';
 import { renderTasks } from '../renderTasks.js';
 import { getTaskDuration, addDays } from '../helpers.js';
 
 export function makeTaskDraggable(element, task) {
   element.onmousedown = (e) => {
-    if (e.button !== 0) return; // only left-click
+    if (e.button !== 0) return; // left-click only
 
     const startX = e.clientX;
     const originalStart = new Date(task.start);
@@ -18,7 +19,7 @@ export function makeTaskDraggable(element, task) {
       task.start = newStart;
       task.end = addDays(task.start, duration);
 
-      renderTasks(); // visually update timeline
+      renderTasks(); // Live update task visually
     };
 
     const onMouseUp = () => {
@@ -30,3 +31,4 @@ export function makeTaskDraggable(element, task) {
     document.addEventListener("mouseup", onMouseUp);
   };
 }
+

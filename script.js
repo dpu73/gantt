@@ -276,6 +276,10 @@ function renderTasks() {
   tasks.forEach((task, i) => {
     const div = document.createElement("div");
     div.className = "task";
+    if (task.id === selectedTaskId) {
+  div.classList.add("selected");
+}
+
     div.style.backgroundColor = task.color || "#F8961E";
     div.style.color = getContrastColor(task.color);
     div.style.position = "absolute";

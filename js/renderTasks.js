@@ -1,7 +1,12 @@
 // js/renderTasks.js
-import { tasks, selectedTaskId, selectedSubtask, zoomLevel } from './state.js';
+//import { tasks, selectedTaskId, selectedSubtask, zoomLevel } from './state.js';
+import { state } from './state.js';
 import { renderEditor } from './renderEditor.js';
 import { getTaskDuration, getContrastColor, dateToOffset, addDays } from './helpers.js';
+state.tasks.forEach((task) => {
+  if (task.id === state.selectedTaskId) ...
+});
+
 
 export function renderTasks() {
   const timeline = document.getElementById("timeline");
@@ -22,10 +27,10 @@ export function renderTasks() {
     : "none";
   wrapper.style.backgroundSize = `${zoomLevel}px 100%`;
 
-  tasks.forEach((task, i) => {
+  state.tasks.forEach((task, i) => {
     const div = document.createElement("div");
     div.className = "task";
-    if (task.id === selectedTaskId) {
+    if (task.id === state.selectedTaskId) {
       div.classList.add("selected");
     }
 

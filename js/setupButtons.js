@@ -1,9 +1,5 @@
 // js/setupButtons.js
-import {
-  tasks, selectedTaskId, selectedSubtask, projectName,
-  defaultDuration, alignMode
-} from './state.js';
-
+import { state } from './state.js';
 import { renderEditor } from './renderEditor.js';
 import { renderTasks } from './renderTasks.js';
 import { showToast } from './helpers.js';
@@ -13,13 +9,12 @@ export function setupButtons() {
   document.getElementById("newProject").onclick = () => {
     if (!confirm("Start a new project? Unsaved data will be lost.")) return;
 
-    tasks.length = 0;
-    const today = new Date().toISOString().split("T")[0];
+    state.tasks.length = 0;
     const first = {
       id: Date.now(),
       name: "First Task",
       start: today,
-      end: addDays(today, defaultDuration),
+      end: addDays(today, state.defaultDuration),
       color: "#F8961E",
       status: "future",
       assigned: "",
@@ -27,9 +22,10 @@ export function setupButtons() {
       subtasks: [],
       expanded: true
     };
-    tasks.push(first);
-    selectedTaskId = first.id;
-    selectedSubtask = null;
+    
+	state.tasks.push(first);
+    state.selectedTaskId = first.id;
+    state.selectedSubtask = null;
 
     renderEditor();
     renderTasks();
@@ -38,8 +34,8 @@ export function setupButtons() {
   // 📤 Export
   document.getElementById("exportBtn").onclick = () => {
     const data = {
-      meta: { projectName },
-      tasks
+      meta: { projectName: state.projectName },
+      tasks: state.tasks
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -48,7 +44,7 @@ export function setupButtons() {
 
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `${projectName.replace(/\s+/g, "_")}.json`;
+    link.download = `${state.projectName.replace(/\s+/g, "_")}.json`;
     link.click();
   };
 
@@ -74,10 +70,10 @@ export function setupButtons() {
 
   // 🧱 Add Primary Task
   document.getElementById("addPrimaryTask").onclick = () => {
-    const selected = tasks.find(t => t.id === selectedTaskId);
-    const last = tasks[tasks.length - 1];
+    const selected = state.tasks.find(t => t.id === state.selectedTaskId);
+    const last = state.tasks[tasks.tasks.length - 1];
 
-    const base = alignMode === "selected" && selected
+    const base = state.alignMode === "selected" && selected
       ? selected.end
       : last?.end || new Date().toISOString().split("T")[0];
 

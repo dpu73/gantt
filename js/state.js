@@ -4,7 +4,29 @@
 export let tasks = [];
 export let selectedTaskId = null;
 export let selectedSubtask = null;
-export let projectName = "Untitled Project";
+
+export const state = {
+  projectName: "Untitled Project",
+  tasks: [],
+  selectedTaskId: null,
+  selectedSubtask: null,
+  defaultDuration: 1,
+  autoColorEnabled: true,
+  zoomLevel: 300,
+  alignMode: "recent"
+};
+
+export function initState() {
+  state.projectName = "Untitled Project";
+  state.tasks = [];
+  state.selectedTaskId = null;
+  state.selectedSubtask = null;
+  state.defaultDuration = 1;
+  state.autoColorEnabled = true;
+  state.zoomLevel = 300;
+  state.alignMode = "recent";
+}
+
 
 // Settings
 export let defaultDuration = 1;

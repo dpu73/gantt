@@ -1,7 +1,6 @@
 // js/setupSettings.js
-import {
-  defaultDuration, zoomLevel, autoColorEnabled, alignMode,
-} from './state.js';
+import { state } from './state.js';
+
 
 import { renderTasks } from './renderTasks.js';
 import { renderEditor } from './renderEditor.js';

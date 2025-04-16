@@ -1,4 +1,4 @@
-import { zoomLevel } from '../state.js';
+import { state } from '../state.js';
 import { renderTasks } from '../renderTasks.js';
 import { getTaskDuration, addDays } from '../helpers.js';
 
@@ -12,7 +12,7 @@ export function makeTaskDraggable(element, task) {
 
     const onMouseMove = (moveEvent) => {
       const deltaPx = moveEvent.clientX - startX;
-      const deltaDays = Math.round(deltaPx / zoomLevel);
+      const deltaDays = Math.round(deltaPx / state.zoomLevel);
 
       const newStart = addDays(originalStart.toISOString().split("T")[0], deltaDays);
       task.start = newStart;

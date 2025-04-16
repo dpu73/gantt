@@ -1,4 +1,5 @@
-import { tasks, selectedTaskId, selectedSubtask, projectName } from './state.js';
+import { state } from './state.js';
+
 import { renderTasks } from './renderTasks.js';
 import { showToast } from './helpers.js';
 

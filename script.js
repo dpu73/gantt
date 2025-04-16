@@ -154,6 +154,24 @@ function setupButtons(){
   renderTasks();
   showToast("➕ Task added");
 };
+// QUICK ADD FIRST TASK
+const quickBtn = document.getElementById("quickAddTask");
+if (quickBtn) {
+  quickBtn.onclick = () => {
+    const base = new Date().toISOString().split("T")[0];
+    const task = createTask(base);
+    task.name = "Quick Task";
+    task.end = addDays(task.start, defaultDuration);
+    tasks.push(task);
+    selectedTaskId = task.id;
+    selectedSubtask = null;
+    editorTab = "task";
+    document.getElementById("projectTitle").textContent = projectName;
+    renderTabs();
+    renderTasks();
+    showToast("➕ Quick task added");
+  };
+}
 
 }
 

@@ -87,11 +87,15 @@ main {
 }
 
 .task.selected {
-  border: 3px solid #1a73e8;
-  box-shadow: 0 0 6px rgba(26, 115, 232, 0.4);
-  background-color: #e8f0fe !important;
-  color: #111 !important;
+  border: 3px solid black;
+  outline: 2px dashed #fff;
+  outline-offset: -6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  background-blend-mode: luminosity;
+  z-index: 9999;
+  position: relative;
 }
+
 
 
 .subtask.selected {

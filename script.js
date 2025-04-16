@@ -128,14 +128,20 @@ function setupButtons() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = event => {
-      const data = JSON.parse(event.target.result);
-      tasks = data.tasks || [];
-      projectName = data.meta?.projectName || "Untitled Project";
-      document.getElementById("projectTitle").textContent = projectName;
-      renderTabs();
-      renderTasks();
-    };
+reader.onload = event => {
+  const data = JSON.parse(event.target.result);
+  tasks = data.tasks || [];
+  projectName = data.meta?.projectName || "Untitled Project";
+  document.getElementById("projectTitle").textContent = projectName;
+
+  selectedTaskId = tasks.length ? tasks[0].id : null;
+  selectedSubtask = null;
+  editorTab = "task";
+
+  renderTabs();
+  renderTasks();
+};
+
     reader.readAsText(file);
   };
 

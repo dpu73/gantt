@@ -87,14 +87,18 @@ main {
 }
 
 .task.selected {
-  outline: 3px solid #2e59d9;
-  background-color: #e4f1ff !important;
-  box-shadow: 0 0 10px rgba(46, 89, 217, 0.4);
-  z-index: 2;
+  box-shadow: 0 0 0 3px #1a73e8;
+  background-color: #e8f0fe !important;
+  z-index: 10;
   transform: scale(1.02);
-  transition: transform 0.1s ease-in-out;
+  transition: all 0.2s ease;
 }
 
+.subtask.selected {
+  background-color: #fef3c7 !important;
+  border-left: 4px solid #facc15;
+  padding-left: 0.5rem;
+}
 
 .subtask {
   font-size: 0.85em;

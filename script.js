@@ -231,3 +231,38 @@ function showToast(m){ let t=document.createElement("div"); t.textContent=m;
 
 // UTILITY
 function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+function renderTaskEditor() {
+  const task = tasks.find(t => t.id === selectedTaskId);
+  if (!task) return;
+
+  const container = document.getElementById("taskFields");
+  container.innerHTML = `
+    <label>Task Name: <input id="taskName" type="text" value="${task.name}" /></label>
+    <label>Start: <input id="taskStart" type="date" value="${task.start}" /></label>
+    <label>End: <input id="taskEnd" type="date" value="${task.end}" /></label>
+    <label>Status:
+      <select id="taskStatus">
+        <option value="future">Future</option>
+        <option value="active">Active</option>
+        <option value="paused">Paused</option>
+        <option value="complete">Complete</option>
+      </select>
+    </label>
+    <label>Notes: <textarea id="taskNotes">${task.notes || ""}</textarea></label>
+    <label>Assigned To: <input id="taskAssigned" type="text" value="${task.assigned || ""}" /></label>
+  `;
+
+  document.getElementById("taskStatus").value = task.status;
+  document.getElementById("taskName").oninput = e => task.name = e.target.value;
+  document.getElementById("taskStart").onchange = e => task.start = e.target.value;
+  document.getElementById("taskEnd").onchange = e => task.end = e.target.value;
+  document.getElementById("taskStatus").onchange = e => task.status = e.target.value;
+  document.getElementById("taskNotes").oninput = e => task.notes = e.target.value;
+  document.getElementById("taskAssigned").oninput = e => task.assigned = e.target.value;
+
+  document.getElementById("applyTaskChanges").onclick = () => {
+    renderTasks();
+    showToast("✅ Task updated");
+  };
+}

@@ -142,6 +142,40 @@ function setupButtons(){
     let ed=document.getElementById("editor");
     ed.style.display = ed.style.display==="none"?"block":"none";
   };
+  document.getElementById("addPrimaryStart").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
+  const base = alignMode === "selected" && selected
+    ? selected.start
+    : last?.start || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
+
+document.getElementById("addPrimaryEnd").onclick = () => {
+  const last = tasks[tasks.length - 1];
+  const selected = selectedTaskId ? findTaskById(selectedTaskId) : null;
+  const base = alignMode === "selected" && selected
+    ? selected.end
+    : last?.end || new Date().toISOString().split("T")[0];
+
+  const task = createTask(base);
+  task.end = addDays(task.start, defaultDuration);
+  tasks.push(task);
+
+  selectedTaskId = task.id;
+  editorTab = "task";
+  renderTabs();
+  renderTasks();
+};
+
   document.getElementById("quickAddTask").onclick = () => {
   const today = new Date().toISOString().split("T")[0];
   const task = createTask(today);
@@ -231,6 +265,9 @@ function showToast(m){ let t=document.createElement("div"); t.textContent=m;
 
 // UTILITY
 function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function findTaskById(id) {
+  return tasks.find(t => t.id === id);
+}
 
 function renderTaskEditor() {
   const task = tasks.find(t => t.id === selectedTaskId);

@@ -112,6 +112,30 @@ function setupSettings(){
 
 // BUTTON SETUP
 function setupButtons(){
+	document.getElementById("addSub").onclick = () => {
+  if (!selectedTaskId) {
+    alert("Please select a primary task first.");
+    return;
+  }
+
+  const parent = findTaskById(selectedTaskId);
+  const sub = {
+    id: Date.now(),
+    name: "New Subtask",
+    start: parent.start,
+    end: addDays(parent.start, 2),
+    status: "future",
+    assigned: ""
+  };
+
+  parent.subtasks.push(sub);
+  selectedSubtask = sub;
+  editorTab = "subtask";
+  renderTabs();
+  renderTasks();
+  showToast("➕ Subtask added");
+};
+
   document.getElementById("newProject").onclick = ()=>{
     if(!confirm("Start new project?")) return;
     projectName="Untitled Project"; tasks=[]; selectedTaskId=null; selectedSubtask=null; colorIndex=0;
@@ -301,5 +325,50 @@ function renderTaskEditor() {
   document.getElementById("applyTaskChanges").onclick = () => {
     renderTasks();
     showToast("✅ Task updated");
+  };
+}
+function renderSubtaskEditor() {
+  const sub = selectedSubtask;
+  if (!sub) return;
+
+  const container = document.getElementById("subtaskFields");
+  container.innerHTML = `
+    <label>Name: <input type="text" id="subName" value="${sub.name}" /></label>
+    <label>Start: <input type="date" id="subStart" value="${sub.start}" /></label>
+    <label>End: <input type="date" id="subEnd" value="${sub.end}" /></label>
+    <label>Status:
+      <select id="subStatus">
+        <option value="future">Future</option>
+        <option value="active">Active</option>
+        <option value="paused">Paused</option>
+        <option value="complete">Complete</option>
+      </select>
+    </label>
+    <label>Assigned To: <input type="text" id="subAssigned" value="${sub.assigned}" /></label>
+  `;
+
+  document.getElementById("subStatus").value = sub.status;
+  document.getElementById("subName").oninput = e => sub.name = e.target.value;
+  document.getElementById("subStart").onchange = e => sub.start = e.target.value;
+  document.getElementById("subEnd").onchange = e => sub.end = e.target.value;
+  document.getElementById("subStatus").onchange = e => sub.status = e.target.value;
+  document.getElementById("subAssigned").oninput = e => sub.assigned = e.target.value;
+
+  document.getElementById("applySubtaskChanges").onclick = () => {
+    renderTasks();
+    showToast("✅ Subtask updated");
+  };
+
+  document.getElementById("deleteSubtask").onclick = () => {
+    if (!selectedTaskId || !selectedSubtask) return;
+
+    const parent = findTaskById(selectedTaskId);
+    if (!parent) return;
+
+    parent.subtasks = parent.subtasks.filter(s => s.id !== selectedSubtask.id);
+    selectedSubtask = null;
+    renderTabs();
+    renderTasks();
+    showToast("🗑️ Subtask deleted");
   };
 }

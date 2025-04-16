@@ -298,7 +298,10 @@ function renderTasks() {
         ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
       </div>
 ? task.subtasks.map(st => `
-  <div class="${'subtask ' + (selectedSubtask && st.id === selectedSubtask.id ? 'selected' : '')}" ...>
+ 
+      //this is where we copied code
+      
+      <div class="${'subtask ' + (selectedSubtask && st.id === selectedSubtask.id ? 'selected' : '')}" ...>
 
        onclick="editSubtask(${task.id}, ${st.id}); event.stopPropagation();">
     - ${st.name}

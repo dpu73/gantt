@@ -71,6 +71,7 @@ export function renderTasks() {
       renderTasks();
     };
 
+makeTaskDraggable(div, task); 
     wrapper.appendChild(div);
   });
 

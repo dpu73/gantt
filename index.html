@@ -1,128 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GANTT2</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/png" href="favicon.png" />
-</head>
 <body>
-
-<header>
-  <div class="header-left">
-    <h1>GANTT2 <span class="version-tag">v0.2.6</span></h1>
-    <div id="projectTitle">Untitled Project</div>
-  </div>
-  <div class="header-right">
-    <button id="toggleEditor" title="Toggle Editor">🪟</button>
-  </div>
-</header>
-
-
-<main>
-  <section id="timeline"></section>
-
-  <aside id="editor">
-    <div class="editor-tabs">
-      <button class="tab-btn active" id="tabProject">📁 Project</button>
-      <button class="tab-btn disabled" id="tabTask">🧱 Task</button>
-      <button class="tab-btn disabled" id="tabSubtask">🧷 Subtask</button>
-      <button class="tab-btn disabled" id="tabTimeline">⚙️ Timeline</button>
+  <header id="toolbar">
+    <div id="projectToolbar" class="toolbar-group">
+      <!-- Project-wide actions -->
+      <button id="newProject">🧹 New Project</button>
+      <button id="importBtn">📥 Import</button>
+      <button id="exportBtn">📤 Export</button>
     </div>
-
-<div class="tab-panel" id="panelProject">
-  <h2>Project Editor</h2>
-  <label>Project Name: <input type="text" id="projectNameField" /></label>
-  <button id="applyProjectName">✔ Apply Project Name</button>
-
-  <hr />
-  <button id="newProject">🧹 New Project</button>
-  <button id="importBtn">📥 Import</button>
-  <button id="exportBtn">📤 Export</button>
-  <hr />
-<button id="quickAddTask">➕ Add First Task</button>
-
-
-</div>
-
-<div class="tab-panel hidden" id="panelTask">
-  <h2>Primary Task Editor</h2>
-
-<div class="editor-buttons">
-  <button id="addPrimaryStart" class="icon-button" title="Add to Start">
-    <svg viewBox="0 0 40 40"><path d="M25 10 L10 20 L25 30" stroke="black" stroke-width="3" fill="none" /></svg>
-    <span>Add Start</span>
-  </button>
-
-  <button id="addPrimaryEnd" class="icon-button" title="Add to End">
-    <svg viewBox="0 0 40 40"><path d="M15 10 L30 20 L15 30" stroke="black" stroke-width="3" fill="none" /></svg>
-    <span>Add End</span>
-  </button>
-</div>
-<button id="deleteTaskFromEditor" title="Delete">
-  <span>🗑</span><br>Delete
-</button>
-<button id="applyTaskChanges" title="Apply">
-  <span>💾</span><br>Apply
-</button>
-
-  <div id="taskColorPicker" class="swatch-container"></div> 
-  
-  <div id="taskFields"></div>
-
-</div>
-
-<div class="tab-panel hidden" id="panelSubtask">
-  <h2>Subtask Editor</h2>
-
- <button id="addSub" title="Add Subtask">
-  <span>🡠</span><br>➕ Add Subtask
-</button>
-  <button id="deleteSubtask" title="Delete Subtask">
-  <span>🗑</span><br>🗑 Delete Subtask
-<button id="applySubtaskChanges">✅ Apply Subtask</button>
-
-
-  <div id="subtaskFields"></div>
-
-
-  
-</div>
-
-
-
-
-    <div class="tab-panel hidden" id="panelTimeline">
-      <h2>Timeline Settings</h2>
-      <label>Default Task Duration:
-        <input type="number" id="defaultDuration" value="1" min="1" style="max-width: 4ch;" />
-      </label>
-      <label>Auto-Assign Colors:
-        <input type="checkbox" id="autoColorToggle" checked />
-      </label>
-      <label>Show Timeline Grid:
-        <input type="checkbox" id="gridToggle" checked />
-      </label>
-      <label>Task Creation Alignment:</label>
-<div style="margin-left: 1rem;">
-  <label><input type="radio" name="alignMode" value="recent" checked /> Anchor to newest task</label><br>
-  <label><input type="radio" name="alignMode" value="selected" /> Anchor to selected task</label>
-</div>
-
+    <div id="taskToolbar" class="toolbar-group hidden">
+      <!-- Primary Task actions -->
+      <button id="addPrimaryTask">🧱 Add Task</button>
+      <button id="deleteTaskFromEditor">🗑️ Delete</button>
+      <!-- Anchor dropdown will go here later -->
     </div>
-  </aside>
-</main>
+    <div id="subtaskToolbar" class="toolbar-group hidden">
+      <!-- Subtask actions -->
+      <button id="addSub">➕ Add Subtask</button>
+      <button id="deleteSubtask">🗑️ Delete Subtask</button>
+    </div>
+  </header>
 
-<footer>
-  <button id="zoomIn">🔍 ZOOM +</button>
-  <button id="zoomOut">🔎 ZOOM -</button>
-  <button id="fitWidth">🧩 Fit Width</button>
-  <button id="collapseAll">📉 Collapse</button>
-  <button id="expandAll">📈 Expand</button>
-</footer>
+  <main>
+    <section id="timeline"></section>
 
-<input type="file" id="fileInput" accept=".json" style="display:none" />
-<script src="script.js"></script>
+    <aside id="editor">
+      <div id="editorHeader">
+        <strong id="projectTitle">Untitled Project</strong>
+      </div>
+      <div id="editorFields">
+        <!-- Fields will be injected here dynamically -->
+      </div>
+    </aside>
+  </main>
+
+  <input type="file" id="fileInput" accept=".json" style="display:none" />
+  <script type="module" src="script.js"></script>
 </body>
-</html>

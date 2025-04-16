@@ -321,12 +321,6 @@ div.innerHTML = `
   ${subtaskHTML}
 `;
 
-
-
-
-         ""}
-    `;
-
     div.onclick = () => {
       selectedTaskId = task.id;
       selectedSubtask = null;

@@ -348,7 +348,11 @@ div.onmousedown = (e) => {
     const deltaPx = moveEvent.clientX - startX;
     const deltaDays = Math.round(deltaPx / zoomLevel);
 
-    const newStart = addDays(originalStart.toISOString().split("T")[0], deltaDays);
+const newStart = addDays(originalStart.toISOString().split("T")[0], deltaDays);
+
+// Prevent moving before project start
+if (new Date(newStart) < new Date(tasks[0].start) && task !== tasks[0]) return;
+
     task.start = newStart;
     task.end = addDays(task.start, durationDays);
     renderTasks();

@@ -297,9 +297,13 @@ function renderTasks() {
         <strong>${task.name}</strong>
         ${task.subtasks?.length ? `<span style="cursor:pointer;" onclick="toggleSubtasks(${task.id}); event.stopPropagation();">${task.expanded ? "▾" : "▸"}</span>` : ""}
       </div>
-      <div style="font-size:0.9em;">🕓 ${task.start} → ${task.end}</div>
-      ${task.expanded !== false && task.subtasks?.length
-        ? task.subtasks.map(st => `<div class="subtask" onclick="editSubtask(${task.id}, ${st.id}); event.stopPropagation();">- ${st.name}</div>`).join("")
+? task.subtasks.map(st => `
+  <div class="subtask ${selectedSubtask && st.id === selectedSubtask.id ? 'selected' : ''}"
+       onclick="editSubtask(${task.id}, ${st.id}); event.stopPropagation();">
+    - ${st.name}
+  </div>
+`).join("")
+
         : ""}
     `;
 

@@ -641,20 +641,12 @@ function renderRuler(startDate, days) {
     console.warn("timelineRuler element not found.");
     return;
   }
-  
-}
-
-const ruler = document.getElementById("timelineRuler");
-if (!ruler) {
-  console.warn("timelineRuler element not found.");
-  return;
-}
 ruler.innerHTML = "...";
 
   const zoom = zoomLevel;
-
   const start = new Date(startDate);
-  for (let i = 0; i < days; i++) {
+ 
+	for (let i = 0; i < days; i++) {
     const current = new Date(start);
     current.setDate(start.getDate() + i);
 
@@ -678,4 +670,4 @@ if (zoom >= 400) {
 
     ruler.appendChild(tick);
   }
-
+}

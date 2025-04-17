@@ -310,3 +310,41 @@ footer button:hover {
   align-items: flex-end;
   white-space: nowrap;
 }
+#mainLayout {
+  display: flex;
+  height: calc(100vh - 100px); /* header/footer spacing */
+}
+
+#timelineWrapper {
+  flex: 3;
+  overflow-x: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+#timelineRuler {
+  background: #f8fafc;
+  display: flex;
+  height: 2rem;
+  border-bottom: 1px solid #ccc;
+  font-size: 0.75rem;
+}
+
+#timeline {
+  flex: 1;
+  background: #fff;
+  padding: 1rem;
+  position: relative;
+  overflow: auto;
+}
+
+#editor {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  background: #f1f5f9;
+  padding: 1rem;
+  border-left: 1px solid #ccc;
+  overflow-y: auto;
+}

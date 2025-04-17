@@ -625,3 +625,34 @@ function toggleSubtasks(taskId) {
     renderTasks();
   }
 }
+
+// === timeline ruler ===
+function renderRuler(startDate, days) {
+  const ruler = document.getElementById("timelineRuler");
+  ruler.innerHTML = "";
+  const zoom = zoomLevel;
+
+  const start = new Date(startDate);
+  for (let i = 0; i < days; i++) {
+    const current = new Date(start);
+    current.setDate(start.getDate() + i);
+
+    const tick = document.createElement("div");
+    tick.className = "tick";
+    tick.style.width = `${zoom}px`;
+
+    // Adjust label granularity based on zoom
+    if (zoom >= 400) {
+      tick.textContent = current.toISOString().slice(11, 16); // HH:MM
+    } else if (zoom >= 150) {
+      tick.textContent = current.toISOString().slice(5, 10); // MM-DD
+    } else if (zoom >= 75) {
+      const week = Math.ceil(current.getDate() / 7);
+      tick.textContent = `Wk ${week}`;
+    } else {
+      tick.textContent = current.getFullYear() + "";
+    }
+
+    ruler.appendChild(tick);
+  }
+}

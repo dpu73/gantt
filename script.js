@@ -637,7 +637,14 @@ function toggleSubtasks(taskId) {
 // === timeline ruler ===
 function renderRuler(startDate, days) {
   const ruler = document.getElementById("timelineRuler");
-  ruler.innerHTML = "";
+  if (!ruler) {
+    console.warn("timelineRuler element not found.");
+    return;
+  }
+  ...
+}
+
+	ruler.innerHTML = "";
   const zoom = zoomLevel;
 
   const start = new Date(startDate);

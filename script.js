@@ -265,6 +265,9 @@ function renderTasks() {
   const timeline = document.getElementById("timeline");
   timeline.innerHTML = "";
 
+	const totalDays = Math.max(30, tasks.length * defaultDuration + 5);
+renderRuler(tasks[0].start, totalDays);
+
   if (!tasks.length) return;
 
   const projectStart = tasks[0].start;

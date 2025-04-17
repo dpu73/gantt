@@ -641,7 +641,7 @@ function renderRuler(startDate, days) {
     console.warn("timelineRuler element not found.");
     return;
   }
-ruler.innerHTML = "...";
+ruler.innerHTML = "";
 
   const zoom = zoomLevel;
   const start = new Date(startDate);

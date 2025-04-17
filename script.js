@@ -656,17 +656,19 @@ function renderRuler(startDate, days) {
     tick.className = "tick";
     tick.style.width = `${zoom}px`;
 
-    // Adjust label granularity based on zoom
-    if (zoom >= 400) {
-      tick.textContent = current.toISOString().slice(11, 16); // HH:MM
-    } else if (zoom >= 150) {
-      tick.textContent = current.toISOString().slice(5, 10); // MM-DD
-    } else if (zoom >= 75) {
-      const week = Math.ceil(current.getDate() / 7);
-      tick.textContent = `Wk ${week}`;
-    } else {
-      tick.textContent = current.getFullYear() + "";
-    }
+ const labelOpts = { month: "short", day: "numeric" };
+
+if (zoom >= 400) {
+  tick.textContent = current.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+} else if (zoom >= 150) {
+  tick.textContent = current.toLocaleDateString(undefined, labelOpts);
+} else if (zoom >= 75) {
+  const week = Math.ceil(current.getDate() / 7);
+  tick.textContent = `Week ${week}`;
+} else {
+  tick.textContent = current.toLocaleDateString(undefined, { year: "numeric", month: "short" });
+}
+
 
     ruler.appendChild(tick);
   }

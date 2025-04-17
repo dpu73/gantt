@@ -263,12 +263,17 @@ document.getElementById("deleteTaskFromEditor").onclick = () => {
 // === RENDERING ===
 function renderTasks() {
   const timeline = document.getElementById("timeline");
-  timeline.innerHTML = "";
+	
+timeline.innerHTML = "";
 
-	const totalDays = Math.max(30, tasks.length * defaultDuration + 5);
+if (!tasks.length) {
+  renderRuler(new Date().toISOString().split("T")[0], 30); // Show something!
+  return;
+}
+
+const totalDays = Math.max(30, tasks.length * defaultDuration + 5);
 renderRuler(tasks[0].start, totalDays);
 
-  if (!tasks.length) return;
 
   const projectStart = tasks[0].start;
   const wrapper = document.createElement("div");

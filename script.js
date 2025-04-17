@@ -672,4 +672,4 @@ if (zoom >= 400) {
 
     ruler.appendChild(tick);
   }
-}
+
